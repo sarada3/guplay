@@ -1,32 +1,30 @@
-import { useState, createContext, Dispatch } from "react";
+import { useState, createContext } from "react";
 
-type UserType = {
-  name: string;
-  thumbnail: string;
-  totalScore: number;
-};
+import { IUser } from "../types";
 
 interface IUserContext {
-  user: UserType;
-  dispatchUser?: Dispatch<React.SetStateAction<UserType>>;
+  user: IUser | null;
+  dispatchUser?: (user: IUser) => void;
+  resetUser?: () => void;
 }
 
 const initialUserState: IUserContext = {
-  user: {
-    name: "",
-    thumbnail: "",
-    totalScore: 0,
-  },
+  user: null,
 };
 
 export const UserContext = createContext<IUserContext>(initialUserState);
 
 // provider
 export const UserProvider = ({ children }: { children: React.ReactNode }) => {
-  const [user, setUser] = useState<UserType>(initialUserState.user);
-
+  const [user, setUser] = useState<IUser | null>(initialUserState.user);
+  const dispatchUser = (user: IUser) => {
+    setUser({ ...user });
+  };
+  const resetUser = () => {
+    setUser(null);
+  };
   return (
-    <UserContext.Provider value={{ user, dispatchUser: setUser }}>
+    <UserContext.Provider value={{ user, dispatchUser, resetUser }}>
       {children}
     </UserContext.Provider>
   );

@@ -2,37 +2,37 @@ import styled from "styled-components";
 
 import CategoryLink from "./CategoryRouterLink";
 
-import { puzzle, rocket } from "../../../Etc/Icons/material";
+import { puzzle, rocket } from "../../../reuse/Icons/index";
 
-import { CategoryRouteType } from "../../../../types";
+import { GameCategoryType } from "../../../../types";
 
 interface CategoryRouterProps {
-  categoryRoute: CategoryRouteType;
-  handleCategoryChange: (category: CategoryRouteType) => void;
+  categoryRoute: GameCategoryType;
+  replaceCategoryRoute: (category: GameCategoryType) => void;
 }
 
 function CategoryRouter(props: CategoryRouterProps) {
-  const { categoryRoute, handleCategoryChange } = props;
+  const { categoryRoute, replaceCategoryRoute } = props;
   return (
     <Container>
       <CategoryLink
         path="puzzle"
         categoryRoute={categoryRoute}
         icon={puzzle}
-        handleCategoryChange={handleCategoryChange}
+        replaceCategoryRoute={replaceCategoryRoute}
       />
       <CategoryLink
         path="arcade"
         categoryRoute={categoryRoute}
         icon={rocket}
-        handleCategoryChange={handleCategoryChange}
+        replaceCategoryRoute={replaceCategoryRoute}
       />
     </Container>
   );
 }
 
 const Container = styled.nav`
-  padding: 25px 0 50px 0;
+  margin-bottom: 50px;
   display: flex;
 `;
 

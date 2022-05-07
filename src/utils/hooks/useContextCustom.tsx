@@ -2,30 +2,23 @@ import { useContext } from "react";
 import { GameContext } from "../../context/game";
 import { UserContext } from "../../context/user";
 
-// export const useMainContextState = () => {
-//   const state = useContext(MainContext);
-//   return state;
-// };
-
-// export const useMainContextDispatch = () => {
-//   const dispatch = useContext(MainDitpatchContext);
-//   if (!dispatch) throw new Error("No Provider detected");
-//   return dispatch;
-// };
-
 export const useGameContext = () => {
-  const { game, dispatchGame } = useContext(GameContext);
-  if (game === undefined || dispatchGame === undefined) {
-    throw new Error("Thear is no Game Provider");
+  const { game, dispatchGame, resetGame } = useContext(GameContext);
+  if (
+    game === undefined ||
+    dispatchGame === undefined ||
+    resetGame === undefined
+  ) {
+    throw new Error("Thear is no Game context provider");
   } else {
-    return { game, dispatchGame };
+    return { game, dispatchGame, resetGame };
   }
 };
 
 export const useUserContext = () => {
   const { user, dispatchUser } = useContext(UserContext);
   if (user === undefined || dispatchUser === undefined) {
-    throw new Error("Thear is no Game Provider");
+    throw new Error("Thear is no User context Provider");
   } else {
     return { user, dispatchUser };
   }

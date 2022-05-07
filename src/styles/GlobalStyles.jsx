@@ -8,7 +8,7 @@ const GlobalStyles = createGlobalStyle`
         font-family: Arial, Helvetica, sans-serif;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
-        color: ${(props) => props.theme.color.TEXT_ACTIVE}
+        color: ${(props) => props.theme.color.TEXT_NORMAL}
     }
     code {
         font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
@@ -25,6 +25,16 @@ const GlobalStyles = createGlobalStyle`
         border: none;
         background-color: inherit;
         cursor: pointer;
+    }
+    textarea, input {
+        outline: none;
+        border: none;
+    }
+    textarea:focus, input:focus{
+        outline: none;
+    }
+    textarea:disabled, input:disabled {
+        background: transparent;
     }
 `;
 

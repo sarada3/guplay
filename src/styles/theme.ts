@@ -1,7 +1,9 @@
 import { DefaultTheme } from "styled-components";
 
 const color = {
-  TEXT_ACTIVE: "#5f6368",
+  TEXT_NORMAL: "#5f6368",
+  TEXT_BLUE: "#1a73e8",
+  LOGO: "#32d1ff",
 };
 
 const length = {

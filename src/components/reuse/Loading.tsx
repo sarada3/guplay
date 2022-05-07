@@ -4,12 +4,6 @@ function Loading() {
   return <Container>Loading</Container>;
 }
 
-const Container = styled.div`
-  position: fixed;
-  z-index: 1;
-  inset: 0;
-  background-color: black;
-  opacity: 0.5;
-`;
+const Container = styled.div``;
 
 export default Loading;

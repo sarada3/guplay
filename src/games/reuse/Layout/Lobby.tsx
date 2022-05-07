@@ -4,6 +4,9 @@ function Lobby() {
   return <Container>Lobby</Container>;
 }
 
-const Container = styled.div``;
+const Container = styled.div`
+  grid-area: lobby;
+  background-color: pink;
+`;
 
 export default Lobby;

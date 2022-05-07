@@ -1,26 +1,46 @@
 import styled from "styled-components";
+import { useEffect, useState } from "react";
+
+import { getGames } from "../../../../utils/db";
 
 import GameListContainer from "../../../reuse/GameListContainer";
 import GameListItem from "../../../reuse/GameListItem";
+import Loading from "../../../reuse/Loading";
+import { HoverButton } from "../../../reuse/StyledComponent";
 
-import { games } from "../../../../datas";
-
-import { GamecodeType } from "../../../../types";
+import { IGame } from "../../../../types";
 
 interface PuzzleProps {
-  handleGameChange: (gameStr: GamecodeType) => void;
+  onClickDispatchGame: (gameObj: IGame) => void;
 }
 
 function Puzzle(props: PuzzleProps) {
-  const { handleGameChange } = props;
+  const { onClickDispatchGame } = props;
+  const [games, setGames] = useState<Array<IGame>>([]);
+  const [render, setRender] = useState("init"); // init, loading, error, done
+  useEffect(() => {
+    const getData = async () => {
+      const result: Array<IGame> | null = await getGames("puzzle");
+      if (result) {
+        setGames(result);
+        setRender("done");
+      } else {
+        setRender("error");
+      }
+    };
+    getData();
+  }, []);
+  if (render === "init") {
+    return null;
+  }
   return (
     <Container>
       <section>
         <SectionTitle>퍼즐게임 웹버전</SectionTitle>
         <SectionSubTitle>퍼즐게임을 플레이 해보세요.</SectionSubTitle>
         <GameListContainer>
-          {games.puzzle.map((game) => (
-            <Button key={game.code} onClick={() => handleGameChange(game.code)}>
+          {games.map((game) => (
+            <Button key={game.code} onClick={() => onClickDispatchGame(game)}>
               <GameListItem game={game} />
             </Button>
           ))}
@@ -32,7 +52,7 @@ function Puzzle(props: PuzzleProps) {
 
 const Container = styled.div``;
 
-const Button = styled.button`
+const Button = styled.div`
   width: 400px;
   height: 340px;
   padding: 10px;

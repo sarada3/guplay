@@ -1,16 +1,16 @@
 import styled, { css, FlattenSimpleInterpolation } from "styled-components";
 
-import { CategoryRouteType } from "../../../../types";
+import { GameCategoryType } from "../../../../types";
 
 interface CategoryRouterLinkProps {
-  path: CategoryRouteType;
-  categoryRoute: CategoryRouteType;
+  path: GameCategoryType;
+  categoryRoute: GameCategoryType;
   icon: React.ReactNode;
-  handleCategoryChange: (category: CategoryRouteType) => void;
+  replaceCategoryRoute: (category: GameCategoryType) => void;
 }
 
 function CategoryRouterLink(props: CategoryRouterLinkProps) {
-  const { categoryRoute, path, icon, handleCategoryChange } = props;
+  const { categoryRoute, path, icon, replaceCategoryRoute } = props;
   const colorProps =
     categoryRoute === path
       ? css`
@@ -25,7 +25,7 @@ function CategoryRouterLink(props: CategoryRouterLinkProps) {
         `;
   return (
     <Container
-      onClick={() => handleCategoryChange(path)}
+      onClick={() => replaceCategoryRoute(path)}
       colorProps={colorProps}
     >
       <Icon>{icon}</Icon>

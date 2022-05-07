@@ -6,15 +6,15 @@ import { PageRouteType } from "../../../types";
 
 interface PageRouterProps {
   pageRoute: PageRouteType;
-  handlePageRoute: (page: PageRouteType) => void;
+  replacePageRoute: (page: PageRouteType) => void;
 }
 
 const pageRoutesArr: Array<PageRouteType> = ["web", "mobile"];
 
 function PageRouter(props: PageRouterProps) {
-  const { pageRoute, handlePageRoute } = props;
-  const scaleProp = pageRoute.length / 10 + 1;
+  const { pageRoute, replacePageRoute } = props;
   const pageIndex = pageRoutesArr.findIndex((page) => page === pageRoute);
+  const scaleProp = pageRoute.length / 10 + 1;
   const translateXProp = (pageIndex + 1) * 100 - 60;
   return (
     <Container>
@@ -23,10 +23,12 @@ function PageRouter(props: PageRouterProps) {
           key={path}
           path={path}
           pageRoute={pageRoute}
-          handlePageRoute={handlePageRoute}
+          replacePageRoute={replacePageRoute}
         />
       ))}
-      <Active scaleProp={scaleProp} translateXProp={translateXProp} />
+      {pageRoute !== "mypage" && (
+        <Active scaleProp={scaleProp} translateXProp={translateXProp} />
+      )}
     </Container>
   );
 }

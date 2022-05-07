@@ -5,7 +5,9 @@ import "styled-components";
 declare module "styled-components" {
   export interface DefaultTheme {
     color: {
-      TEXT_ACTIVE: string;
+      TEXT_NORMAL: string;
+      TEXT_BLUE: string;
+      LOGO: string;
     };
     length: {
       HEIGHT_HEADER: number;

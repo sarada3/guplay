@@ -1,4 +1,7 @@
 import styled from "styled-components";
+import { useState } from "react";
+
+import useStorage from "../../utils/hooks/useStorage";
 
 import { IGame } from "../../types";
 
@@ -8,34 +11,35 @@ interface GameListItemProps {
 
 function GameListItem(props: GameListItemProps) {
   const {
-    game: { title, grade, category, thumbnail, author },
+    game: { title, like, category, thumbnail, creator },
   } = props;
+  const gameThumbnailSrc = useStorage(thumbnail);
+  const creatorThumbnailSrc = useStorage(creator.thumbnail);
   return (
     <>
       <div style={{ height: "70%" }}>
-        <GameThumbnail src={thumbnail} />
+        {gameThumbnailSrc !== "" && <GameThumbnail src={gameThumbnailSrc} />}
       </div>
-      <Author>
-        <AuthorThumbnail src={author.thumbnail} />
-        <AuthorContents>
+      <Creator>
+        <CreatorThumbnailContainer>
+          {creatorThumbnailSrc !== "" && (
+            <img
+              width="100%"
+              height="100%"
+              src={creatorThumbnailSrc}
+              alt={creator.name}
+            />
+          )}
+        </CreatorThumbnailContainer>
+        <CreatorContents>
           <Title>{title}</Title>
           <div>{category}</div>
-          <div>{grade}★</div>
-        </AuthorContents>
-      </Author>
+          <div>{like.length}</div>
+        </CreatorContents>
+      </Creator>
     </>
   );
 }
-
-// const Container = styled.button`
-//   width: 400px;
-//   height: 340px;
-//   padding: 10px;
-//   cursor: pointer;
-//   &:hover {
-//     background-color: #eee;
-//   }
-// `;
 
 const GameThumbnail = styled.img`
   width: 100%;
@@ -43,20 +47,21 @@ const GameThumbnail = styled.img`
   border-radius: 10px;
 `;
 
-const Author = styled.div`
+const Creator = styled.div`
   height: 30%;
   display: flex;
   align-items: center;
 `;
 
-const AuthorThumbnail = styled.img`
+const CreatorThumbnailContainer = styled.div`
   margin-right: 15px;
   width: 50px;
   height: 50px;
   border-radius: 15px;
+  overflow: hidden;
 `;
 
-const AuthorContents = styled.div`
+const CreatorContents = styled.div`
   height: 80%;
   display: flex;
   flex-direction: column;

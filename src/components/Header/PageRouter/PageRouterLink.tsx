@@ -6,15 +6,15 @@ import { PageRouteType } from "../../../types";
 interface PageRouterLinkProps {
   path: PageRouteType;
   pageRoute: PageRouteType;
-  handlePageRoute: (page: PageRouteType) => void;
+  replacePageRoute: (page: PageRouteType) => void;
 }
 
 function PageRouterLink(props: PageRouterLinkProps) {
-  const { path, pageRoute, handlePageRoute } = props;
+  const { path, pageRoute, replacePageRoute } = props;
   const isActive = path === pageRoute;
   return (
     <Container>
-      <Link isActive={isActive} onClick={() => handlePageRoute(path)}>
+      <Link isActive={isActive} onClick={() => replacePageRoute(path)}>
         {path}
       </Link>
     </Container>
