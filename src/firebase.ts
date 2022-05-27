@@ -9,7 +9,7 @@ import {
   DocumentData,
 } from "firebase/firestore";
 
-import { IGame, IUser } from "./types";
+import { IGame, IRanking, IUser } from "./types";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDPIHuwaK17YHjMnHq6S0UFHjh35OBwWiI",
@@ -34,3 +34,4 @@ export const auth = getAuth(app);
 export const storage = getStorage(app);
 export const gameCollection = createCollection<IGame>("games");
 export const userCollection = createCollection<IUser>("users");
+export const rankingCollection = createCollection<IRanking>(`rankings`);

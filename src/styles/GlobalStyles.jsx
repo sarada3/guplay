@@ -24,6 +24,7 @@ const GlobalStyles = createGlobalStyle`
     button {
         border: none;
         background-color: inherit;
+        color: inherit;
         cursor: pointer;
     }
     textarea, input {

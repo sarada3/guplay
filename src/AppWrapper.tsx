@@ -1,6 +1,6 @@
+import { ThemeProvider } from "styled-components";
 import { GameProvider } from "./context/game";
 import { UserProvider } from "./context/user";
-import { ThemeProvider } from "styled-components";
 import GlobalStyles from "./styles/GlobalStyles";
 import theme from "./styles/theme";
 

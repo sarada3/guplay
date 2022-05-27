@@ -1,4 +1,4 @@
-import { useState, createContext } from "react";
+import { useState, useCallback, createContext } from "react";
 
 import { IUser } from "../types";
 
@@ -17,12 +17,12 @@ export const UserContext = createContext<IUserContext>(initialUserState);
 // provider
 export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<IUser | null>(initialUserState.user);
-  const dispatchUser = (user: IUser) => {
+  const dispatchUser = useCallback((user: IUser) => {
     setUser({ ...user });
-  };
-  const resetUser = () => {
+  }, []);
+  const resetUser = useCallback(() => {
     setUser(null);
-  };
+  }, []);
   return (
     <UserContext.Provider value={{ user, dispatchUser, resetUser }}>
       {children}

@@ -1,75 +1,75 @@
-import styled from "styled-components";
-import { useEffect } from "react";
-import { useState, useCallback, Suspense, lazy } from "react";
+import { useState, useEffect, useCallback, Suspense, lazy } from "react";
 
-import { useUserContext } from "./utils/hooks/useContextCustom";
 import { auth } from "./firebase";
+import { useUserContext, useGameContext } from "./utils/hooks/useContextCustom";
+import useLoadingAndError from "./utils/hooks/useLoadingAndError";
+import { readUser, readGames } from "./utils/db";
 
-import Header from "./components/Header";
-import Footer from "./components/Footer";
-import Loading from "./components/reuse/Loading";
+import Header from "./component-page/Header";
+import Main from "./component-page/Main";
+import Footer from "./component-page/Footer";
+import Loading from "./component-reuse/Loading";
+import Error from "./component-reuse/Error";
 
 import { PageRouteType } from "./types";
 
-const WebgamePage = lazy(() => import("./components/Main/WebgamePage"));
-const MobilegamePage = lazy(() => import("./components/Main/MobilegamePage"));
-const MyPage = lazy(() => import("./components/Main/MyPage"));
+/**
+ * 게임들은 각각 lazy import
+ */
+const Flipcard = lazy(() => import("./component-game/games/single/Flipcard"));
 
 function App() {
   const { dispatchUser } = useUserContext();
+  const { game, dispatchGameList } = useGameContext();
+  const { loading, error, startLoading, endLoading, invokeError } =
+    useLoadingAndError();
   const [pageRoute, setPageRoute] = useState<PageRouteType>("web");
+
   const replacePageRoute = useCallback((route: PageRouteType) => {
     setPageRoute(route);
   }, []);
+
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
-      if (user && user.displayName && user.email && user.photoURL) {
-        dispatchUser({
-          id: user.uid,
-          name: user.displayName,
-          email: user.email,
-          thumbnail: user.photoURL,
-        });
+    const unsubscribe = auth.onAuthStateChanged(async (user) => {
+      if (user) {
+        const result = await readUser(user.uid);
+        if (result) {
+          dispatchUser(result);
+        }
       }
     });
     return () => {
       unsubscribe();
     };
   }, [dispatchUser]);
+  useEffect(() => {
+    const getGameList = async () => {
+      startLoading();
+      const gameList = await readGames();
+      if (gameList) {
+        dispatchGameList(gameList);
+        endLoading();
+      } else {
+        invokeError();
+      }
+    };
+    getGameList();
+  }, [dispatchGameList, startLoading, endLoading, invokeError]);
+
+  if (error) {
+    return <Error />;
+  }
   return (
-    <Suspense fallback={<Loading />}>
-      <Header pageRoute={pageRoute} replacePageRoute={replacePageRoute} />
-      <Main>
-        {pageRoute === "web" ? (
-          <WebgamePage />
-        ) : pageRoute === "mobile" ? (
-          <MobilegamePage />
-        ) : pageRoute === "mypage" ? (
-          <MyPage />
-        ) : null}
-      </Main>
-      <Footer />
-    </Suspense>
+    <>
+      {loading && <Loading translucent={true} />}
+      <Suspense fallback={<Loading translucent={true} />}>
+        <Header pageRoute={pageRoute} replacePageRoute={replacePageRoute} />
+        <Main pageRoute={pageRoute} replacePageRoute={replacePageRoute} />
+        <Footer />
+        {game.code === "flipcard" ? <Flipcard /> : null}
+      </Suspense>
+    </>
   );
 }
-
-const Main = styled.main`
-  margin: auto;
-  margin-top: ${(props) => props.theme.length.HEIGHT_HEADER}px;
-  padding: 50px 120px 0 120px;
-  max-width: 2500px;
-  @media ${(props) => props.theme.device.UPTO_MOBILE} {
-    margin-top: ${(props) => props.theme.length.HEIGHT_HEADER_MOBILE}px;
-  }
-  @media ${(props) => props.theme.device.UPTO_LAPTOP} {
-    padding: 0 80px 0 80px;
-  }
-  @media ${(props) => props.theme.device.UPTO_TABLET} {
-    padding: 0 30px 0 30px;
-  }
-  @media ${(props) => props.theme.device.UPTO_MOBILE} {
-    padding: 0 10px 0 10px;
-  }
-`;
 
 export default App;
