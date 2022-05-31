@@ -1,6 +1,4 @@
-// need refactoring...
-
-import styled from "styled-components";
+import styled, { useTheme } from "styled-components";
 import { useState, useEffect, useRef } from "react";
 
 import { shuffleAndAddTranslateProps } from "../../../../../utils";
@@ -23,6 +21,9 @@ interface PlayingProps {
 }
 
 function FlipcardPlaying(props: PlayingProps) {
+  const theme = useTheme();
+  const isUnderMobileWidth = window.innerWidth <= theme.deviceSizes.mobile;
+  console.log("isUnderMobileWidth", isUnderMobileWidth);
   const {
     saveStarttime,
     boardWidth,
@@ -32,15 +33,19 @@ function FlipcardPlaying(props: PlayingProps) {
     endLoading,
     invokeError,
   } = props;
-  // 카드 길이 : 보드 길이 / (한줄당 카드수 + 1) => 양쪽 합해서 카드 한개만큼의 패딩
   const [cardList, setCardList] = useState<Array<Card>>([]);
   const [countdown, setCountdown] = useState(7);
   const [numOfMatch, setNumOfMatch] = useState(0);
-  // const [tempIndex, setTempIndex] = useState(-1);
-  const tempIndex = useRef(-1);
+  const [tempIndex, setTempIndex] = useState(-1);
+
   const countdownTimer = useRef<ReturnType<typeof setInterval>>();
 
-  const cardWidth = boardWidth / (numOfCardPerLine + 1);
+  // 카드 한개 길이:
+  // mobile 이하- 보드길이 / 한줄당 카드수 => 화면이 작아서 게임하기 불편하므로 꽉채움
+  // mobile 위 - 보드길이 / (한줄당 카드수 + 1) => 양쪽 합해서 카드 한개만큼의 패딩
+  const cardWidth = isUnderMobileWidth
+    ? boardWidth / numOfCardPerLine
+    : boardWidth / (numOfCardPerLine + 1);
   const numOfCardTotal = (numOfCardPerLine * numOfCardPerLine - 1) / 2;
 
   /**
@@ -56,14 +61,14 @@ function FlipcardPlaying(props: PlayingProps) {
     // already opened. Do nothing.
     if (cardList[targetIndex].state === "open") selector = "already_opened";
     // first card opened.
-    else if (tempIndex.current === -1) {
+    else if (tempIndex === -1) {
       selector = "first";
     }
     // second card opened. Match
-    else if (cardList[targetIndex].no === cardList[tempIndex.current].no)
+    else if (cardList[targetIndex].no === cardList[tempIndex].no)
       selector = "match";
     // second card opened. no Match
-    else if (cardList[targetIndex].no !== cardList[tempIndex.current].no)
+    else if (cardList[targetIndex].no !== cardList[tempIndex].no)
       selector = "unmatch";
 
     switch (selector) {
@@ -78,8 +83,7 @@ function FlipcardPlaying(props: PlayingProps) {
           ...cardList.slice(targetIndex + 1),
         ];
         setCardList(newCardList);
-        // setTempIndex(targetIndex);
-        tempIndex.current = targetIndex;
+        setTempIndex(targetIndex);
         break;
       case "match":
         console.log("match");
@@ -97,19 +101,21 @@ function FlipcardPlaying(props: PlayingProps) {
           ];
           setCardList(newCardList2);
           setNumOfMatch((prev) => prev + 1);
-          // setTempIndex(-1);
-          tempIndex.current = -1;
+          setTempIndex(-1);
         }
         break;
       case "unmatch":
-        console.log("unmatch", tempIndex.current);
+        console.log("unmatch", tempIndex);
         const newCardList3 = cardList.map((card, index): Card => {
           if (index === targetIndex) {
             return {
               ...card,
-              state: "unmatch_target_close",
+              state:
+                card.state === "unmatch_target_close"
+                  ? "re_unmatch_target_close"
+                  : "unmatch_target_close",
             };
-          } else if (index === tempIndex.current) {
+          } else if (index === tempIndex) {
             return {
               ...card,
               state: "unmatch_temp_close",
@@ -119,8 +125,7 @@ function FlipcardPlaying(props: PlayingProps) {
           }
         });
         setCardList(newCardList3);
-        // setTempIndex(-1);
-        tempIndex.current = -1;
+        setTempIndex(-1);
         break;
       default:
         break;

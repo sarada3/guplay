@@ -4,7 +4,7 @@ export type GameCategoryType = "single" | "multi";
 export type PageRouteType = "web" | "mobile" | "mypage";
 export type LoginRouteType = "signup" | "signin" | "forgotpassword";
 export type GamecodeType = "flipcard" | "onetofifty" | "fortress" | string;
-export type GameStateType = "intro" | "playing" | "end";
+export type GameStateType = "intro" | "playing" | "result";
 
 export interface IUser {
   id: string; // auto

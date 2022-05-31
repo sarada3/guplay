@@ -1,33 +1,19 @@
 import styled from "styled-components";
 
-import { readRankings } from "../../../utils/db";
-import { useGameContext } from "../../../utils/hooks/useContextCustom";
+import { readRankings } from "../../utils/db";
 
-import GameListContainer from "../../../component-reuse/GameListContainer";
-import GameListItem from "../../../component-reuse/GameListItem";
+import GameListItem from "./GameListItem";
 
-import { GameCategoryType, IGame } from "../../../types";
-
-const titleText = {
-  main: "Single playing game",
-  sub: "You can play alone.",
-};
+import { IGame } from "../../types";
 
 interface GameListProps {
-  categoryRoute: GameCategoryType;
+  titleText: { main: string; sub: string };
+  gameList: Array<IGame>;
+  dispatchGame: (game: IGame) => void;
 }
 
 function GameList(props: GameListProps) {
-  const { categoryRoute } = props;
-  const { gameList, dispatchGame } = useGameContext();
-
-  const renderingGameList = gameList.filter(
-    (game) => game.category === categoryRoute
-  );
-  if (categoryRoute === "multi") {
-    titleText.main = "Multi playing game";
-    titleText.sub = "You can play with your friends :D";
-  }
+  const { titleText, gameList, dispatchGame } = props;
 
   const onClickGameThumbnail = async (selectedGame: IGame) => {
     const rankingList = await readRankings(selectedGame.id);
@@ -40,13 +26,13 @@ function GameList(props: GameListProps) {
     <section>
       <MainTitle>{titleText.main}</MainTitle>
       <SubTitle>{titleText.sub}</SubTitle>
-      <GameListContainer>
-        {renderingGameList.map((game) => (
+      <ListContainer>
+        {gameList.map((game) => (
           <OuterLi key={game.code} onClick={() => onClickGameThumbnail(game)}>
             <GameListItem game={game} />
           </OuterLi>
         ))}
-      </GameListContainer>
+      </ListContainer>
     </section>
   );
 }
@@ -63,12 +49,16 @@ const OuterLi = styled.li`
 
 const MainTitle = styled.h1`
   font-size: 24px;
-  color: black;
 `;
 
 const SubTitle = styled.h2`
   margin-bottom: 20px;
   font-size: 12px;
+`;
+
+const ListContainer = styled.ul`
+  display: flex;
+  flex-wrap: wrap;
 `;
 
 export default GameList;

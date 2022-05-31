@@ -2,9 +2,9 @@ import styled from "styled-components";
 import { useState } from "react";
 
 import RankingItem from "./RankingItem";
-import { TextSmall } from "../../../component-reuse/StyledComponent";
+import { TextSmall } from "../../../../component-reuse/StyledComponent";
 
-import { IRanking } from "../../../types";
+import { IRanking } from "../../../../types";
 
 interface RankingProps {
   rankingList: Array<IRanking>;
@@ -38,7 +38,9 @@ function Ranking(props: RankingProps) {
       )}
       <RankItemContainer>
         {selectedList.length === 0 ? (
-          <TextSmall>no data</TextSmall>
+          <li>
+            <TextSmall>no data</TextSmall>
+          </li>
         ) : (
           selectedList.map((ranking, index) => (
             <RankingItem
@@ -57,6 +59,12 @@ const Container = styled.div`
   grid-area: ranking;
   background-color: skyblue;
   text-align: center;
+  @media ${(props) => props.theme.device.UPTO_TABLET} {
+    grid-area: lobby_game_ranking;
+    position: absolute;
+    inset: 0;
+    transform: translateX(100%);
+  }
 `;
 
 const Title = styled.div`

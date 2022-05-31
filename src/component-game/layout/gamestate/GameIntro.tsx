@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-interface IntroType {
+interface GameIntroProps {
   title: string;
   creator: {
     thumbnail: string;
@@ -10,7 +10,7 @@ interface IntroType {
   children: React.ReactNode;
 }
 
-function Intro(props: IntroType) {
+function GameIntro(props: GameIntroProps) {
   const { title, creator, enterToPlaying, children } = props;
 
   return (
@@ -48,4 +48,4 @@ const Creator = styled.div`
   bottom: 10%;
 `;
 
-export default Intro;
+export default GameIntro;

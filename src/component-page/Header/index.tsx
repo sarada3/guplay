@@ -48,14 +48,14 @@ function Header(props: HeaderProps) {
           <Nav>
             <Logo onClick={() => replacePageRoute("web")}>
               <LogoImg>{playstore}</LogoImg>
-              <LogoTitle>Gu play</LogoTitle>
+              <LogoText>Gu play</LogoText>
             </Logo>
             <PageRouter
               pageRoute={pageRoute}
               replacePageRoute={replacePageRoute}
             />
           </Nav>
-          <div style={{ display: "flex" }}>
+          <Actions>
             <ActionItem padding={14}>{search}</ActionItem>
             <ActionItem padding={14}>{questionmark}</ActionItem>
             <ActionItem padding={10} onClick={onClickThumbnail}>
@@ -65,7 +65,7 @@ function Header(props: HeaderProps) {
                 <div style={{ width: "50%", height: "50%" }}>{plus}</div>
               )}
             </ActionItem>
-          </div>
+          </Actions>
         </InnerContainer>
         {user && settingModalOpen && (
           <SettingModal
@@ -123,9 +123,13 @@ const LogoImg = styled.span`
   }
 `;
 
-const LogoTitle = styled.span`
+const LogoText = styled.span`
   font-size: 25px;
   font-weight: 600;
+`;
+
+const Actions = styled.div`
+  display: flex;
 `;
 
 const ActionItem = styled(HoverButton)<{ padding: number }>`

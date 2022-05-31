@@ -36,12 +36,12 @@ function SettingModal(props: SettingModalProps) {
     <Container>
       <ClickingDiv onClick={closeSettingModal} />
       <InnerContainer>
-        <Top>
+        <Info>
           <Name>{user.name}</Name>
           <TextSmall>
             <TextBlue>{user.email}</TextBlue>
           </TextSmall>
-        </Top>
+        </Info>
         <Actions>
           <ActionItemMobileOnly onClick={() => onClickActionItem("web")}>
             <ActionItemIcon>{gear}</ActionItemIcon>WEB
@@ -50,7 +50,7 @@ function SettingModal(props: SettingModalProps) {
             <ActionItemIcon>{gear}</ActionItemIcon>MOBILE
           </ActionItemMobileOnly>
           <ActionItem onClick={() => onClickActionItem("mypage")}>
-            <ActionItemIcon>{gear}</ActionItemIcon>Profile setting
+            <ActionItemIcon>{gear}</ActionItemIcon>MY PAGE
           </ActionItem>
           <ActionItem onClick={logout}>
             <ActionItemIcon>{rightBracket}</ActionItemIcon>Logout
@@ -82,19 +82,18 @@ const Container = styled.div`
   animation: ${scaleUp} 0.1s ease-out;
 `;
 
-const InnerContainer = styled.div`
-  position: relative;
-`;
-
 const ClickingDiv = styled.div`
   position: fixed;
   inset: 0;
   width: 100vw;
   height: 100vh;
-  /* background: transparent; */
 `;
 
-const Top = styled.div`
+const InnerContainer = styled.div`
+  position: relative;
+`;
+
+const Info = styled.div`
   padding-bottom: 20px;
   border-bottom: 1px solid lightgray;
 `;
@@ -110,8 +109,7 @@ const Actions = styled.div`
 `;
 
 const ActionItem = styled(HoverButton)`
-  /* margin: 10px 0 10px 0; */
-  padding: 20px 10px 20px 10px;
+  padding: 15px 10px 15px 10px;
   width: 100%;
   justify-content: flex-start;
   color: #3f3f3f;

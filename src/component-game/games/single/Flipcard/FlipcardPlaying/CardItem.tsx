@@ -49,7 +49,6 @@ interface CardItemProps {
 
 function CardItem(props: CardItemProps) {
   const { index, card, cardWidth, onClickCard } = props;
-  console.log(index, card.state);
 
   return (
     <Container

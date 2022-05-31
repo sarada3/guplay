@@ -1,11 +1,11 @@
 import styled from "styled-components";
 
-import useStorage from "../utils/hooks/useStorage";
+import useStorage from "../../utils/hooks/useStorage";
 
-import { FlexCenter } from "./StyledComponent";
-import { heart } from "../assets/icons";
+import { FlexCenter } from "../StyledComponent";
+import { heart } from "../../assets/icons";
 
-import { IGame } from "../types";
+import { IGame } from "../../types";
 
 interface GameListItemProps {
   game: IGame;

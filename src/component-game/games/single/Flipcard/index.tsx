@@ -1,19 +1,20 @@
 import styled from "styled-components";
 import { useEffect, useState, useRef, useCallback } from "react";
 
-import { createOrdispatchGameRanking } from "../../../../utils/db";
+import { createOrModifyGameRanking } from "../../../../utils/db";
 import {
   useGameContext,
   useUserContext,
 } from "../../../../utils/hooks/useContextCustom";
 import useLoadingAndError from "../../../../utils/hooks/useLoadingAndError";
 
+import GameWindow from "../../../layout/GameWindow";
+import GameIntro from "../../../layout/gamestate/GameIntro";
+import GameResult from "../../../layout/gamestate/GameResult";
 import FlipcardSetting from "./FlipcardSetting";
 import FlipcardPlaying from "./FlipcardPlaying";
-import FlipcardResult from "./FlipcardResult";
 import Loading from "../../../../component-reuse/Loading";
 import Error from "../../../../component-reuse/Error";
-import { GameWindow, Header, Lobby, Ranking, Intro } from "../../../Layout";
 
 import { GameStateType } from "../../../../types";
 
@@ -42,10 +43,13 @@ export type Card = {
  * 게임관련 세부사항은 FlipcardPlaying에서 처리.
  */
 function Flipcard() {
+  // 공통 state
   const { user } = useUserContext();
   const { game, dispatchGameLike, dispatchGameRanking, dispatchResetGame } =
     useGameContext();
   const [gameState, setGameState] = useState<GameStateType>("intro");
+
+  // 게임별 state
   const [numOfCardPerLine, setNumOfCardPerLine] = useState(
     Number(game.difficulties[0].charAt(0))
   );
@@ -87,7 +91,7 @@ function Flipcard() {
       const recordToRender =
         minute > 0 ? `${minute}m ${second}s` : `${second}s`;
       setResult({ record: timeElapsed, recordToRender });
-      setGameState("end");
+      setGameState("result");
     } else {
       console.error("startTime is -1. Something goes wrong");
     }
@@ -95,7 +99,7 @@ function Flipcard() {
   const registerRanking = useCallback(async () => {
     if (user) {
       startLoading();
-      const response = await createOrdispatchGameRanking(
+      const response = await createOrModifyGameRanking(
         user,
         game.id,
         `${numOfCardPerLine}x${numOfCardPerLine}`,
@@ -131,15 +135,14 @@ function Flipcard() {
 
   useEffect(() => {
     // 뷰포트 크기에 맞는 게임보드 사이즈(정사각) 확정
-    // FlipcardPlaying에서 게임에 필요한 값들 한번에 결정하는것도 좋겠지만
-    // 여기서 사용자가 Intro를 보고있는 동안 계산하는것도 좋은 방법인듯...
-    // 여기서 board 사이즈만 결정하고 FlipcardPlaying에서 카드사이즈, translate값들 결정할것,,
     const decideBoardWidth = async () => {
       if (gameContainerRef.current) {
         const gameContainerWidth = gameContainerRef.current.clientWidth;
         const gameContainerHeight = gameContainerRef.current.clientHeight;
-        const currentBoardLength =
-          Math.min(gameContainerWidth, gameContainerHeight) * 0.9;
+        const currentBoardLength = Math.min(
+          gameContainerWidth,
+          gameContainerHeight * 0.9
+        );
         setBoardWidth(currentBoardLength);
       }
     };
@@ -152,16 +155,14 @@ function Flipcard() {
   return (
     <>
       {loading && <Loading translucent={true} />}
-      <GameWindow>
-        <Header
-          game={game}
-          dispatchGameLike={dispatchGameLike}
-          closeGameWindow={closeGameWindow}
-        />
-        <Lobby />
-        <GameContainer ref={gameContainerRef}>
+      <GameWindow
+        game={game}
+        dispatchGameLike={dispatchGameLike}
+        closeGameWindow={closeGameWindow}
+      >
+        <FlipcardContainer ref={gameContainerRef}>
           {gameState === "intro" ? (
-            <Intro
+            <GameIntro
               title={game.title}
               creator={game.creator}
               enterToPlaying={enterToPlaying}
@@ -170,7 +171,7 @@ function Flipcard() {
                 numOfCardPerLine={numOfCardPerLine}
                 onChangeNumOfCardPerLine={onChangeNumOfCardPerLine}
               />
-            </Intro>
+            </GameIntro>
           ) : gameState === "playing" ? (
             <FlipcardPlaying
               saveStarttime={saveStarttime}
@@ -181,25 +182,29 @@ function Flipcard() {
               endLoading={endLoading}
               invokeError={invokeError}
             />
-          ) : gameState === "end" ? (
-            <FlipcardResult
+          ) : gameState === "result" ? (
+            <GameResult
               user={user}
               recordToRender={result.recordToRender}
               onClickRetry={onClickRetry}
               registerRanking={registerRanking}
             />
           ) : null}
-        </GameContainer>
-        <Ranking rankingList={game.rankings} difficulties={game.difficulties} />
+        </FlipcardContainer>
       </GameWindow>
     </>
   );
 }
 
-const GameContainer = styled.div`
+const FlipcardContainer = styled.div`
   grid-area: game;
   background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab) 0 0/300%
     300%;
+  @media ${(props) => props.theme.device.UPTO_TABLET} {
+    grid-area: lobby_game_ranking;
+    position: absolute;
+    inset: 0;
+  }
 `;
 
 export default Flipcard;

@@ -1,21 +1,21 @@
 import styled from "styled-components";
 
-import useLoginModalOpen from "../../../../utils/hooks/useLoginModalOpen";
+import useLoginModalOpen from "../../../utils/hooks/useLoginModalOpen";
 
-import LoginModal from "../../../../component-reuse/LoginModal";
-import UserRow from "../../../../component-reuse/UserRow";
-import { FlexCenter } from "../../../../component-reuse/StyledComponent";
+import LoginModal from "../../../component-reuse/LoginModal";
+import UserRow from "../../../component-reuse/UserRow";
+import { FlexCenter } from "../../../component-reuse/StyledComponent";
 
-import { IUser } from "../../../../types";
+import { IUser } from "../../../types";
 
-interface FlipcardResultProps {
+interface GameResultProps {
   user: IUser | null;
   recordToRender: string;
   onClickRetry: () => void;
   registerRanking: () => void;
 }
 
-function FlipcardResult(props: FlipcardResultProps) {
+function GameResult(props: GameResultProps) {
   const { user, recordToRender, onClickRetry, registerRanking } = props;
   const { loginModalOpen, openLoginModal, closeLoginModal } =
     useLoginModalOpen();
@@ -30,8 +30,10 @@ function FlipcardResult(props: FlipcardResultProps) {
         </Info>
         {user ? (
           <Rank>
-            <UserRow user={user} />
-            {recordToRender}
+            <Result>
+              <UserRow user={user} />
+              <div style={{ marginLeft: 20 }}>{recordToRender}</div>
+            </Result>
             <RegisterButton onClick={registerRanking}>REGISTER</RegisterButton>
           </Rank>
         ) : (
@@ -62,29 +64,37 @@ const Info = styled.div`
 `;
 
 const Rank = styled(FlexCenter)`
-  display: grid;
-  grid-template-rows: 1fr;
-  grid-template-columns: 1fr 1fr 1fr;
-  grid-gap: 30px;
+  display: flex;
   @media ${(props) => props.theme.device.UPTO_MOBILE} {
-    grid-template-columns: 1fr 1fr;
-    grid-gap: 30px 10px;
+    flex-direction: column;
+  }
+`;
+
+const Result = styled.div`
+  margin-right: 20px;
+  display: flex;
+  align-items: center;
+  @media ${(props) => props.theme.device.UPTO_MOBILE} {
+    margin-bottom: 10px;
+  }
+`;
+
+const RegisterButton = styled.button`
+  padding: 6px 10px 6px 10px;
+  color: beige;
+  border: 1px solid beige;
+  border-radius: 999px;
+  &:hover {
+    color: white;
+    border-color: white;
   }
 `;
 
 const RetryButton = styled.button`
-  padding: 6px 10px 6px 10px;
-  color: white;
-  font-size: 20px;
-  letter-spacing: 2px;
+  letter-spacing: 3px;
+  text-decoration: underline;
   &:hover {
     color: black;
-  }
-`;
-
-const RegisterButton = styled(RetryButton)`
-  @media ${(props) => props.theme.device.UPTO_MOBILE} {
-    grid-column: 1/3;
   }
 `;
 
@@ -94,4 +104,4 @@ const Action = styled.div`
   text-align: center;
 `;
 
-export default FlipcardResult;
+export default GameResult;

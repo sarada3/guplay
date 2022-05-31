@@ -16,7 +16,7 @@ function FlipcardSetting(props: FlipcardSettingProps) {
   return (
     <div>
       <Title>DIFFICULTY</Title>
-      <RadioContainer>
+      <Radio>
         <RadioItem>
           <input
             type="radio"
@@ -37,7 +37,7 @@ function FlipcardSetting(props: FlipcardSettingProps) {
           />
           <label htmlFor="5x5">5x5</label>
         </RadioItem>
-      </RadioContainer>
+      </Radio>
     </div>
   );
 }
@@ -47,7 +47,7 @@ const Title = styled.div`
   text-align: center;
 `;
 
-const RadioContainer = styled.ul`
+const Radio = styled.ul`
   margin-bottom: 15px;
   display: flex;
 `;

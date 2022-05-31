@@ -83,7 +83,7 @@ export const updateGameLike = async (
 
 // ===================================  Ranking  ===================================
 
-export const createOrdispatchGameRanking = async (
+export const createOrModifyGameRanking = async (
   user: IUser,
   gameId: string,
   difficulty: string,

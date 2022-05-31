@@ -31,6 +31,7 @@ const Container = styled.main`
   margin-top: ${(props) => props.theme.length.HEIGHT_HEADER}px;
   padding: 50px 120px 0 120px;
   max-width: 2500px;
+  min-height: 100vh;
   @media ${(props) => props.theme.device.UPTO_LAPTOP} {
     padding: 30px 80px 0 80px;
   }

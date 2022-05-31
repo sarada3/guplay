@@ -1,13 +1,14 @@
 import styled from "styled-components";
 
-import { updateGameLike } from "../../utils/db";
-import { useUserContext } from "../../utils/hooks/useContextCustom";
-import useLoginModalOpen from "../../utils/hooks/useLoginModalOpen";
+import { updateGameLike } from "../../../utils/db";
+import { useUserContext } from "../../../utils/hooks/useContextCustom";
+import useLoginModalOpen from "../../../utils/hooks/useLoginModalOpen";
 
-import LoginModal from "../../component-reuse/LoginModal";
-import { heart } from "../../assets/icons";
+import LoginModal from "../../../component-reuse/LoginModal";
+import { TextSmall } from "../../../component-reuse/StyledComponent";
+import { heart, xmark } from "../../../assets/icons";
 
-import { IGame } from "../../types";
+import { IGame } from "../../../types";
 
 interface HeaderProps {
   game: IGame;
@@ -56,23 +57,19 @@ function Header(props: HeaderProps) {
           <TextSmall>{game.category}</TextSmall>
         </div>
         <div>{game.description}</div>
-        <div style={{ display: "flex", alignItems: "center" }}>
+        <Like>
           <LikeButton onClick={onClickLike} isLike={isLike}>
             {heart}
           </LikeButton>
           <div>{game.likes.length}</div>
-        </div>
-        <button onClick={closeGameWindow}>close</button>
+        </Like>
+        <CloseButton onClick={closeGameWindow}>{xmark}</CloseButton>
       </Container>
     </>
   );
 }
 
-const TextSmall = styled.div`
-  font-size: 12px;
-`;
-
-const Container = styled.div`
+const Container = styled.header`
   grid-area: header;
   padding: 0 20px 0 20px;
   display: flex;
@@ -81,13 +78,17 @@ const Container = styled.div`
   background: #fbf0b3;
 `;
 
-const Title = styled.div`
+const Title = styled.h1`
   font-weight: 600;
   color: brown;
 `;
 
+const Like = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
 const LikeButton = styled.button<{ isLike: boolean }>`
-  margin-right: 10px;
   width: 35px;
   height: 35px;
   display: flex;
@@ -95,6 +96,11 @@ const LikeButton = styled.button<{ isLike: boolean }>`
   stroke: black;
   stroke-width: 4;
   fill: ${(props) => (props.isLike ? "red" : "white")};
+`;
+
+const CloseButton = styled.button`
+  width: 30px;
+  height: 30px;
 `;
 
 export default Header;

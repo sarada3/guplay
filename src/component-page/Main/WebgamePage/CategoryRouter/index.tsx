@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-import CategoryLink from "./CategoryRouterLink";
+import CategoryLink from "./CategoryLink";
 
 import { GameCategoryType } from "../../../../types";
 

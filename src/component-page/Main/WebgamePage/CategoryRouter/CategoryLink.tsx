@@ -2,13 +2,13 @@ import styled, { css, FlattenSimpleInterpolation } from "styled-components";
 
 import { GameCategoryType } from "../../../../types";
 
-interface CategoryRouterLinkProps {
+interface CategoryLinkProps {
   path: GameCategoryType;
   categoryRoute: GameCategoryType;
   replaceCategoryRoute: (category: GameCategoryType) => void;
 }
 
-function CategoryRouterLink(props: CategoryRouterLinkProps) {
+function CategoryLink(props: CategoryLinkProps) {
   const { categoryRoute, path, replaceCategoryRoute } = props;
 
   const colorProps =
@@ -29,7 +29,7 @@ function CategoryRouterLink(props: CategoryRouterLinkProps) {
       onClick={() => replaceCategoryRoute(path)}
       colorProps={colorProps}
     >
-      <Title>{path.charAt(0).toUpperCase() + path.slice(1)} play</Title>
+      <LinkText>{path.charAt(0).toUpperCase() + path.slice(1)} play</LinkText>
     </Container>
   );
 }
@@ -45,9 +45,9 @@ const Container = styled.a<{ colorProps: FlattenSimpleInterpolation }>`
   ${(props) => props.colorProps};
 `;
 
-const Title = styled.div`
+const LinkText = styled.span`
   padding: 4px 6px 4px 6px;
   font-weight: 600;
 `;
 
-export default CategoryRouterLink;
+export default CategoryLink;
