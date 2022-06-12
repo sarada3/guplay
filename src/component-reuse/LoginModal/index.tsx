@@ -3,6 +3,7 @@ import { useState, useCallback } from "react";
 import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
+  sendPasswordResetEmail,
 } from "firebase/auth";
 
 import useLoadingAndError from "../../utils/hooks/useLoadingAndError";
@@ -15,6 +16,7 @@ import OverlayScreenCenterBox from "../OverlayCenterBox";
 import SignIn from "./SignIn";
 import SignUp from "./SignUp";
 import ForgotPassword from "./ForgotPassword";
+import Error from "../Error";
 import { FlexCenter } from "../StyledComponent";
 import { xmark } from "../../assets/icons";
 
@@ -27,7 +29,8 @@ interface LoginModalProps {
 function LoginModal(props: LoginModalProps) {
   const { closeLoginModal } = props;
   const { dispatchUser } = useUserContext();
-  const { loading, startLoading, endLoading } = useLoadingAndError();
+  const { loading, error, startLoading, endLoading, invokeError } =
+    useLoadingAndError();
   const [loginRoute, setLoginRoute] = useState<LoginRouteType>("signin");
   const [formValue, setFormValue] = useState({
     email: "",
@@ -44,7 +47,7 @@ function LoginModal(props: LoginModalProps) {
     setFormValue({ email: "", password: "", passwordConfirm: "" });
     setLoginRoute(route);
   }, []);
-  const signInUser = async () => {
+  const signInUser = () => {
     if (!validateEmail(formValue.email)) {
       alert("You have entered an invalid email address");
     } else {
@@ -80,7 +83,7 @@ function LoginModal(props: LoginModalProps) {
           } else if (error.code === "auth/email-already-in-use") {
             alert("This email address is already in use");
           } else {
-            alert("Please check your email and password");
+            throw error;
           }
         });
         if (userCredential && userCredential.user.email) {
@@ -95,14 +98,34 @@ function LoginModal(props: LoginModalProps) {
           closeLoginModal();
         }
       } catch (error) {
-        console.error(error);
+        invokeError();
       } finally {
         endLoading();
       }
     }
   };
+  const _sendPasswordResetEmail = () => {
+    if (!validateEmail(formValue.email)) {
+      alert("You have entered an invalid email address");
+    } else {
+      sendPasswordResetEmail(auth, formValue.email)
+        .then(() => {
+          alert("Email sent");
+        })
+        .catch((error) => {
+          if (error.code === "auth/user-not-found") {
+            alert("There is no user to corresponding this email");
+          } else {
+            invokeError();
+          }
+        });
+    }
+  };
+  if (error) {
+    return <Error />;
+  }
   return (
-    <OverlayScreenCenterBox translucent={true} onClickOuter={closeLoginModal}>
+    <OverlayScreenCenterBox translucent={true}>
       <InnerContainer>
         <CloseButton onClick={closeLoginModal}>{xmark}</CloseButton>
         <Logo>Guplay</Logo>
@@ -121,7 +144,11 @@ function LoginModal(props: LoginModalProps) {
             onChangeFormValues={onChangeFormValues}
           />
         ) : loginRoute === "forgotpassword" ? (
-          <ForgotPassword />
+          <ForgotPassword
+            _sendPasswordResetEmail={_sendPasswordResetEmail}
+            replaceLoginRoute={replaceLoginRoute}
+            onChangeFormValues={onChangeFormValues}
+          />
         ) : null}
       </InnerContainer>
     </OverlayScreenCenterBox>
@@ -134,11 +161,15 @@ const InnerContainer = styled(FlexCenter)`
   width: 30%;
   min-width: 400px;
   max-width: 700px;
-  /* height: 70%; */
   flex-direction: column;
   background: white;
   border: 1px solid #dadce0;
   border-radius: 20px;
+  @media ${(props) => props.theme.device.UPTO_MOBILE} {
+    width: 95%;
+    min-width: 95%;
+    margin: auto;
+  }
 `;
 
 const CloseButton = styled.button`

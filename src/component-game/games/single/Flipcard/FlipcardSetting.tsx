@@ -1,17 +1,17 @@
 import styled from "styled-components";
 
-import { NumOfCardPerLineType } from ".";
+import { Difficulty } from ".";
 
-const THREE = 3;
-const FIVE = 5;
+const THREE = "3x3";
+const FIVE = "5x5";
 
 interface FlipcardSettingProps {
-  numOfCardPerLine: number;
-  onChangeNumOfCardPerLine: (num: NumOfCardPerLineType) => void;
+  difficulty: string;
+  onChangeDifficulty: (difficultyValue: Difficulty) => void;
 }
 
 function FlipcardSetting(props: FlipcardSettingProps) {
-  const { numOfCardPerLine, onChangeNumOfCardPerLine } = props;
+  const { difficulty, onChangeDifficulty } = props;
 
   return (
     <div>
@@ -20,22 +20,22 @@ function FlipcardSetting(props: FlipcardSettingProps) {
         <RadioItem>
           <input
             type="radio"
-            id="3x3"
+            id={THREE}
             value={THREE}
-            checked={numOfCardPerLine === THREE}
-            onChange={() => onChangeNumOfCardPerLine(THREE)}
+            checked={difficulty === THREE}
+            onChange={() => onChangeDifficulty(THREE)}
           />
-          <label htmlFor="3x3">3x3</label>
+          <label htmlFor={THREE}>{THREE}</label>
         </RadioItem>
         <RadioItem>
           <input
             type="radio"
-            id="5x5"
+            id={FIVE}
             value={FIVE}
-            checked={numOfCardPerLine === FIVE}
-            onChange={() => onChangeNumOfCardPerLine(FIVE)}
+            checked={difficulty === FIVE}
+            onChange={() => onChangeDifficulty(FIVE)}
           />
-          <label htmlFor="5x5">5x5</label>
+          <label htmlFor={FIVE}>{FIVE}</label>
         </RadioItem>
       </Radio>
     </div>

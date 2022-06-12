@@ -1,17 +1,17 @@
 import styled from "styled-components";
-import { useState } from "react";
+import React, { useState } from "react";
 
 import RankingItem from "./RankingItem";
-import { TextSmall } from "../../../../component-reuse/StyledComponent";
+import { TextSmall } from "../../../component-reuse/StyledComponent";
 
-import { IRanking } from "../../../../types";
+import { IRanking } from "../../../types";
 
-interface RankingProps {
+interface GameLayoutRankingProps {
   rankingList: Array<IRanking>;
   difficulties: Array<string>;
 }
 
-function Ranking(props: RankingProps) {
+function GameLayoutRanking(props: GameLayoutRankingProps) {
   const { rankingList, difficulties } = props;
   const [tab, setTab] = useState(difficulties[0]);
 
@@ -95,4 +95,4 @@ const RankItemContainer = styled.ul`
   overflow-x: auto;
 `;
 
-export default Ranking;
+export default React.memo(GameLayoutRanking);

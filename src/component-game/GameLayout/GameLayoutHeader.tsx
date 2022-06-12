@@ -1,16 +1,17 @@
 import styled from "styled-components";
+import React from "react";
 
-import { updateGameLike } from "../../../utils/db";
-import { useUserContext } from "../../../utils/hooks/useContextCustom";
-import useLoginModalOpen from "../../../utils/hooks/useLoginModalOpen";
+import { updateGameLike } from "../../utils/db";
+import { useUserContext } from "../../utils/hooks/useContextCustom";
+import useLoginModalOpen from "../../utils/hooks/useLoginModalOpen";
 
-import LoginModal from "../../../component-reuse/LoginModal";
-import { TextSmall } from "../../../component-reuse/StyledComponent";
-import { heart, xmark } from "../../../assets/icons";
+import LoginModal from "../../component-reuse/LoginModal";
+import { TextSmall } from "../../component-reuse/StyledComponent";
+import { heart, xmark } from "../../assets/icons";
 
-import { IGame } from "../../../types";
+import { IGame } from "../../types";
 
-interface HeaderProps {
+interface GameLayoutHeaderProps {
   game: IGame;
   dispatchGameLike: (
     currentLike: boolean,
@@ -18,10 +19,11 @@ interface HeaderProps {
     currentGameId: string
   ) => void;
   closeGameWindow: () => void;
+  invokeError: () => void;
 }
 
-function Header(props: HeaderProps) {
-  const { game, dispatchGameLike, closeGameWindow } = props;
+function GameLayoutHeader(props: GameLayoutHeaderProps) {
+  const { game, dispatchGameLike, closeGameWindow, invokeError } = props;
   const { user } = useUserContext();
   const { loginModalOpen, openLoginModal, closeLoginModal } =
     useLoginModalOpen();
@@ -42,6 +44,8 @@ function Header(props: HeaderProps) {
       const response = await updateGameLike(game.id, user.id, isLike);
       if (response.ok) {
         dispatchGameLike(isLike, user.id, game.id);
+      } else {
+        invokeError();
       }
     } else {
       openLoginModal();
@@ -103,4 +107,4 @@ const CloseButton = styled.button`
   height: 30px;
 `;
 
-export default Header;
+export default React.memo(GameLayoutHeader);

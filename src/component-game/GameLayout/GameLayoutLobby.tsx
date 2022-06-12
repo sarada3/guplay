@@ -1,6 +1,7 @@
 import styled from "styled-components";
+import React from "react";
 
-function Lobby() {
+function GameLayoutLobby() {
   return <Container>Lobby</Container>;
 }
 
@@ -15,4 +16,4 @@ const Container = styled.div`
   }
 `;
 
-export default Lobby;
+export default React.memo(GameLayoutLobby);

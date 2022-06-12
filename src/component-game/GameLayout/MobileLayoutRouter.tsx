@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-import { arrowLeft, arrowRight } from "../../../assets/icons";
+import { arrowLeft, arrowRight } from "../../assets/icons";
 
 interface MobileLayoutRouterProps {
   lobbyExist: boolean;

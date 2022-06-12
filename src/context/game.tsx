@@ -5,8 +5,8 @@ import { IGame, IRanking } from "../types";
 interface IGameContext {
   game: IGame;
   gameList: Array<IGame>;
-  dispatchGameList?: (gameList: Array<IGame>) => void;
   dispatchGame?: (game: IGame) => void;
+  dispatchGameList?: (gameList: Array<IGame>) => void;
   dispatchGameLike?: (
     currentLike: boolean,
     userId: string,

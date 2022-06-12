@@ -1,6 +1,7 @@
 import styled, { useTheme } from "styled-components";
 import { useState, useEffect, useRef } from "react";
 
+import useLoadingAndError from "../../../../../utils/hooks/useLoadingAndError";
 import { shuffleAndAddTranslateProps } from "../../../../../utils";
 import { getUrl } from "../../../../../utils/storage";
 
@@ -21,13 +22,11 @@ interface PlayingProps {
 }
 
 function FlipcardPlaying(props: PlayingProps) {
-  const theme = useTheme();
-  const isUnderMobileWidth = window.innerWidth <= theme.deviceSizes.mobile;
-  console.log("isUnderMobileWidth", isUnderMobileWidth);
+  console.log("FlipcardPlaying");
   const {
-    saveStarttime,
-    boardWidth,
     numOfCardPerLine,
+    boardWidth,
+    saveStarttime,
     handleGameEnd,
     startLoading,
     endLoading,
@@ -37,6 +36,8 @@ function FlipcardPlaying(props: PlayingProps) {
   const [countdown, setCountdown] = useState(7);
   const [numOfMatch, setNumOfMatch] = useState(0);
   const [tempIndex, setTempIndex] = useState(-1);
+  const theme = useTheme();
+  const isUnderMobileWidth = window.innerWidth <= theme.deviceSizes.mobile;
 
   const countdownTimer = useRef<ReturnType<typeof setInterval>>();
 

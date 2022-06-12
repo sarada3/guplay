@@ -39,11 +39,13 @@ function MyPage(props: MyPageProps) {
       <MyPageSetting user={user} dispatchUser={dispatchUser} />
       {/* 내 랭킹 */}
       {/* like list */}
-      <GameList
-        titleText={titleText}
-        gameList={renderingGameList}
-        dispatchGame={dispatchGame}
-      />
+      {renderingGameList.length > 0 && (
+        <GameList
+          titleText={titleText}
+          gameList={renderingGameList}
+          dispatchGame={dispatchGame}
+        />
+      )}
     </Container>
   );
 }

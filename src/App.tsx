@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, Suspense, lazy } from "react";
+import { useState, useEffect, useCallback, Suspense } from "react";
 
 import { auth } from "./firebase";
 import { useUserContext, useGameContext } from "./utils/hooks/useContextCustom";
@@ -12,15 +12,17 @@ import Loading from "./component-reuse/Loading";
 import Error from "./component-reuse/Error";
 
 import { PageRouteType } from "./types";
-
-/**
- * 게임들은 각각 lazy import
- */
-const Flipcard = lazy(() => import("./component-game/games/single/Flipcard"));
+import GameLayout from "./component-game/GameLayout";
 
 function App() {
-  const { dispatchUser } = useUserContext();
-  const { game, dispatchGameList } = useGameContext();
+  const { user, dispatchUser } = useUserContext();
+  const {
+    game,
+    dispatchGameList,
+    dispatchGameLike,
+    dispatchGameRanking,
+    dispatchResetGame,
+  } = useGameContext();
   const { loading, error, startLoading, endLoading, invokeError } =
     useLoadingAndError();
   const [pageRoute, setPageRoute] = useState<PageRouteType>("web");
@@ -66,7 +68,18 @@ function App() {
         <Header pageRoute={pageRoute} replacePageRoute={replacePageRoute} />
         <Main pageRoute={pageRoute} replacePageRoute={replacePageRoute} />
         <Footer />
-        {game.code === "flipcard" ? <Flipcard /> : null}
+        {game.code !== "" && (
+          <GameLayout
+            user={user}
+            game={game}
+            dispatchGameLike={dispatchGameLike}
+            dispatchGameRanking={dispatchGameRanking}
+            dispatchResetGame={dispatchResetGame}
+            startLoading={startLoading}
+            endLoading={endLoading}
+            invokeError={invokeError}
+          />
+        )}
       </Suspense>
     </>
   );
