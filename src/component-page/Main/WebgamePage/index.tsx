@@ -9,7 +9,7 @@ import GameList from "../../../component-reuse/GameList";
 import { GameCategoryType } from "../../../types";
 
 function WebgamePage() {
-  const { gameList, dispatchGame } = useGameContext();
+  const { gameList } = useGameContext();
   const [categoryRoute, setCategoryRoute] =
     useState<GameCategoryType>("single");
   const replaceCategoryRoute = useCallback((category: GameCategoryType) => {
@@ -20,7 +20,7 @@ function WebgamePage() {
   );
   const titleText = {
     main: "Single playing game",
-    sub: "Multi playing game",
+    sub: "Play game alone.",
   };
   if (categoryRoute === "multi") {
     titleText.main = "Multi playing game";
@@ -32,11 +32,7 @@ function WebgamePage() {
         categoryRoute={categoryRoute}
         replaceCategoryRoute={replaceCategoryRoute}
       />
-      <GameList
-        titleText={titleText}
-        gameList={renderingGameList}
-        dispatchGame={dispatchGame}
-      />
+      <GameList titleText={titleText} gameList={renderingGameList} />
     </Container>
   );
 }

@@ -171,6 +171,7 @@ function GameLayoutGame(props: GameLayoutGameProps) {
 
 const Container = styled.div`
   grid-area: game;
+  z-index: 0;
   background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab) 0 0/300%
     300%;
   @media ${(props) => props.theme.device.UPTO_TABLET} {

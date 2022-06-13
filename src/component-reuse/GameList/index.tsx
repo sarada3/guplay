@@ -1,5 +1,6 @@
 import styled from "styled-components";
 
+import { useGameContext } from "../../utils/hooks/useContextCustom";
 import { readRankings } from "../../utils/db";
 
 import GameListItem from "./GameListItem";
@@ -9,12 +10,11 @@ import { IGame } from "../../types";
 interface GameListProps {
   titleText: { main: string; sub: string };
   gameList: Array<IGame>;
-  dispatchGame: (game: IGame) => void;
 }
 
 function GameList(props: GameListProps) {
-  const { titleText, gameList, dispatchGame } = props;
-
+  const { titleText, gameList } = props;
+  const { dispatchGame } = useGameContext();
   const onClickGameThumbnail = async (selectedGame: IGame) => {
     const rankingList = await readRankings(selectedGame.id);
     if (rankingList) {

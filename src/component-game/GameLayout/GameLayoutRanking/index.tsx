@@ -3,16 +3,23 @@ import React, { useState } from "react";
 
 import RankingItem from "./RankingItem";
 import { TextSmall } from "../../../component-reuse/StyledComponent";
+import {
+  LobbyContainer,
+  LobbyInnerContainer,
+  LobbyMobileCloseButton,
+} from "../GameLayoutLobby";
 
 import { IRanking } from "../../../types";
 
 interface GameLayoutRankingProps {
+  mobileOpen: boolean;
+  closeMobileRoutes: () => void;
   rankingList: Array<IRanking>;
   difficulties: Array<string>;
 }
 
 function GameLayoutRanking(props: GameLayoutRankingProps) {
-  const { rankingList, difficulties } = props;
+  const { mobileOpen, closeMobileRoutes, rankingList, difficulties } = props;
   const [tab, setTab] = useState(difficulties[0]);
 
   const toggleTab = (tabName: string) => {
@@ -23,52 +30,62 @@ function GameLayoutRanking(props: GameLayoutRankingProps) {
     .sort((a, b) => a.record - b.record);
 
   return (
-    <Container>
-      <Title>RANKING</Title>
-      {difficulties.length > 0 && (
-        <Tab>
-          {difficulties.map((difficulty) => (
-            <TabItem key={difficulty} isActive={difficulty === tab}>
-              <button onClick={() => toggleTab(difficulty)}>
-                {difficulty}
-              </button>
-            </TabItem>
-          ))}
-        </Tab>
-      )}
-      <RankItemContainer>
-        {selectedList.length === 0 ? (
-          <li>
-            <TextSmall>no data</TextSmall>
-          </li>
-        ) : (
-          selectedList.map((ranking, index) => (
-            <RankingItem
-              key={ranking.userId + ranking.difficulty}
-              ranking={ranking}
-              index={index}
-            />
-          ))
+    <Container mobileOpen={mobileOpen}>
+      <InnerContainer>
+        <MobileCloseButton onClick={closeMobileRoutes}>{">"}</MobileCloseButton>
+        <Title>RANKING</Title>
+        {difficulties.length > 0 && (
+          <Tab>
+            {difficulties.map((difficulty) => (
+              <TabItem key={difficulty} isActive={difficulty === tab}>
+                <button onClick={() => toggleTab(difficulty)}>
+                  {difficulty}
+                </button>
+              </TabItem>
+            ))}
+          </Tab>
         )}
-      </RankItemContainer>
+        <RankItemContainer>
+          {selectedList.length === 0 ? (
+            <li>
+              <TextSmall>no data</TextSmall>
+            </li>
+          ) : (
+            selectedList.map((ranking, index) => (
+              <RankingItem
+                key={ranking.userId + ranking.difficulty}
+                ranking={ranking}
+                index={index}
+              />
+            ))
+          )}
+        </RankItemContainer>
+      </InnerContainer>
     </Container>
   );
 }
 
-const Container = styled.div`
+const Container = styled(LobbyContainer)<{ mobileOpen: boolean }>`
   grid-area: ranking;
-  background-color: skyblue;
-  text-align: center;
   @media ${(props) => props.theme.device.UPTO_TABLET} {
     grid-area: lobby_game_ranking;
-    position: absolute;
-    inset: 0;
-    transform: translateX(100%);
+    justify-content: flex-end;
+    transform: ${(props) =>
+      props.mobileOpen ? "translateX(0)" : "translateX(100%)"};
+  }
+`;
+
+const InnerContainer = styled(LobbyInnerContainer)`
+  background-color: skyblue;
+`;
+
+const MobileCloseButton = styled(LobbyMobileCloseButton)`
+  @media ${(props) => props.theme.device.UPTO_TABLET} {
+    left: -20px;
   }
 `;
 
 const Title = styled.div`
-  margin-top: 10px;
   letter-spacing: 2px;
   font-weight: 600;
 `;

@@ -22,7 +22,6 @@ interface PlayingProps {
 }
 
 function FlipcardPlaying(props: PlayingProps) {
-  console.log("FlipcardPlaying");
   const {
     numOfCardPerLine,
     boardWidth,

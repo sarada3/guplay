@@ -6,9 +6,13 @@ import GameLayoutHeader from "./GameLayoutHeader";
 import GameLayoutLobby from "./GameLayoutLobby";
 import GameLayoutGame from "./GameLayoutGame";
 import GameLayoutRanking from "./GameLayoutRanking";
-import MobileLayoutRouter from "./MobileLayoutRouter";
 
 import { IGame, IRanking, IUser } from "../../types";
+
+const initialMobileRoute = {
+  lobby: false,
+  ranking: false,
+};
 
 interface GameLayoutProps {
   user: IUser | null;
@@ -40,7 +44,17 @@ function GameLayout(props: GameLayoutProps) {
     endLoading,
     invokeError,
   } = props;
+  const [mobileRoute, setMobileRoute] = useState(initialMobileRoute);
 
+  const onClickRouterLink = useCallback((route: string) => {
+    setMobileRoute({
+      ...initialMobileRoute,
+      [route]: true,
+    });
+  }, []);
+  const closeMobileRoutes = useCallback(() => {
+    setMobileRoute(initialMobileRoute);
+  }, []);
   const closeGameWindow = useCallback(() => {
     if (window.confirm("Are you sure to exit game?")) {
       dispatchResetGame();
@@ -51,14 +65,17 @@ function GameLayout(props: GameLayoutProps) {
   return createPortal(
     <Container>
       <InnerContainer>
-        {/* <MobileLayoutRouter lobbyExist={game.category === "multi"} /> */}
         <GameLayoutHeader
           game={game}
           dispatchGameLike={dispatchGameLike}
+          onClickRouterLink={onClickRouterLink}
           closeGameWindow={closeGameWindow}
           invokeError={invokeError}
         />
-        <GameLayoutLobby />
+        <GameLayoutLobby
+          mobileOpen={mobileRoute.lobby}
+          closeMobileRoutes={closeMobileRoutes}
+        />
         <GameLayoutGame
           user={user}
           game={game}
@@ -68,6 +85,8 @@ function GameLayout(props: GameLayoutProps) {
           invokeError={invokeError}
         />
         <GameLayoutRanking
+          mobileOpen={mobileRoute.ranking}
+          closeMobileRoutes={closeMobileRoutes}
           rankingList={game.rankings}
           difficulties={game.difficulties}
         />
@@ -103,7 +122,7 @@ const InnerContainer = styled.section`
     width: 95%;
     height: 95%;
     grid-template-columns: 100%;
-    grid-template-rows: 10% 90%;
+    grid-template-rows: 100px 1fr;
     grid-template-areas:
       "header"
       "lobby_game_ranking";

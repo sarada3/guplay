@@ -1,3 +1,10 @@
+/**
+ * Export
+ * 1. game setting.
+ * 2. game playing.
+ * 3. types.
+ */
+
 import FlipcardSetting from "./FlipcardSetting";
 import FlipcardPlaying from "./FlipcardPlaying";
 

@@ -18,12 +18,19 @@ interface GameLayoutHeaderProps {
     userId: string,
     currentGameId: string
   ) => void;
+  onClickRouterLink: (route: string) => void;
   closeGameWindow: () => void;
   invokeError: () => void;
 }
 
 function GameLayoutHeader(props: GameLayoutHeaderProps) {
-  const { game, dispatchGameLike, closeGameWindow, invokeError } = props;
+  const {
+    game,
+    dispatchGameLike,
+    onClickRouterLink,
+    closeGameWindow,
+    invokeError,
+  } = props;
   const { user } = useUserContext();
   const { loginModalOpen, openLoginModal, closeLoginModal } =
     useLoginModalOpen();
@@ -56,18 +63,36 @@ function GameLayoutHeader(props: GameLayoutHeaderProps) {
     <>
       {loginModalOpen && <LoginModal closeLoginModal={closeLoginModal} />}
       <Container>
-        <div>
-          <Title>{game.title}</Title>
-          <TextSmall>{game.category}</TextSmall>
-        </div>
-        <div>{game.description}</div>
-        <Like>
-          <LikeButton onClick={onClickLike} isLike={isLike}>
-            {heart}
-          </LikeButton>
-          <div>{game.likes.length}</div>
-        </Like>
-        <CloseButton onClick={closeGameWindow}>{xmark}</CloseButton>
+        <Contents>
+          <div>
+            <Title>{game.title}</Title>
+            <TextSmall>{game.category}</TextSmall>
+          </div>
+          <div>{game.description}</div>
+          <Like>
+            <LikeButton onClick={onClickLike} isLike={isLike}>
+              {heart}
+            </LikeButton>
+            <div>{game.likes.length}</div>
+          </Like>
+          <CloseButton onClick={closeGameWindow}>{xmark}</CloseButton>
+        </Contents>
+        <MobileRouter>
+          {game.category === "multi" && (
+            <button
+              style={{ left: 0 }}
+              onClick={() => onClickRouterLink("lobby")}
+            >
+              Lobby{">>"}
+            </button>
+          )}
+          <button
+            style={{ position: "absolute", right: 0 }}
+            onClick={() => onClickRouterLink("ranking")}
+          >
+            {"<<"}Ranking
+          </button>
+        </MobileRouter>
       </Container>
     </>
   );
@@ -75,11 +100,18 @@ function GameLayoutHeader(props: GameLayoutHeaderProps) {
 
 const Container = styled.header`
   grid-area: header;
+  background: #fbf0b3;
+`;
+
+const Contents = styled.div`
   padding: 0 20px 0 20px;
+  height: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: #fbf0b3;
+  @media ${(props) => props.theme.device.UPTO_MOBILE} {
+    height: 70%;
+  }
 `;
 
 const Title = styled.h1`
@@ -105,6 +137,15 @@ const LikeButton = styled.button<{ isLike: boolean }>`
 const CloseButton = styled.button`
   width: 30px;
   height: 30px;
+`;
+
+const MobileRouter = styled.div`
+  display: none;
+  @media ${(props) => props.theme.device.UPTO_MOBILE} {
+    display: block;
+    position: relative;
+    height: 30%;
+  }
 `;
 
 export default React.memo(GameLayoutHeader);

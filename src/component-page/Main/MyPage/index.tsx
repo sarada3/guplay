@@ -17,13 +17,13 @@ interface MyPageProps {
 function MyPage(props: MyPageProps) {
   const { replacePageRoute } = props;
   const { user, dispatchUser } = useUserContext();
-  const { gameList, dispatchGame } = useGameContext();
+  const { gameList } = useGameContext();
   const renderingGameList = user
     ? gameList.filter((game) => game.likes.includes(user.id))
     : [];
   const titleText = {
     main: "Games you like",
-    sub: "Break the record!",
+    sub: "Eiusmod in pariatur nostrud deserunt tempor ullamco ex mollit aliqua fugiat laborum ex.!",
   };
   useEffect(() => {
     if (!user || !auth.currentUser) {
@@ -40,11 +40,7 @@ function MyPage(props: MyPageProps) {
       {/* 내 랭킹 */}
       {/* like list */}
       {renderingGameList.length > 0 && (
-        <GameList
-          titleText={titleText}
-          gameList={renderingGameList}
-          dispatchGame={dispatchGame}
-        />
+        <GameList titleText={titleText} gameList={renderingGameList} />
       )}
     </Container>
   );
