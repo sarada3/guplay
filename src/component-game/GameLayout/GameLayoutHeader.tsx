@@ -109,7 +109,7 @@ const Contents = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  @media ${(props) => props.theme.device.UPTO_MOBILE} {
+  @media ${(props) => props.theme.device.UPTO_TABLET} {
     height: 70%;
   }
 `;
@@ -141,7 +141,7 @@ const CloseButton = styled.button`
 
 const MobileRouter = styled.div`
   display: none;
-  @media ${(props) => props.theme.device.UPTO_MOBILE} {
+  @media ${(props) => props.theme.device.UPTO_TABLET} {
     display: block;
     position: relative;
     height: 30%;

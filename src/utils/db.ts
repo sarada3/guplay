@@ -48,7 +48,6 @@ export const readGames = async () => {
     const querySnapshot = await getDocs(q);
     const result: Array<IGame> = [];
     querySnapshot.forEach((doc) => {
-      // const docData: IGame = doc.data();
       result.push({ ...doc.data(), id: doc.id });
     });
     return result;
@@ -65,15 +64,10 @@ export const updateGameLike = async (
 ) => {
   const gameRef = doc(gameCollection, gameId);
   try {
-    if (currentLike) {
-      await updateDoc(gameRef, {
-        likes: arrayRemove(userId),
-      });
-    } else {
-      await updateDoc(gameRef, {
-        likes: arrayUnion(userId),
-      });
-    }
+    const arrayBehavior = currentLike ? arrayRemove : arrayUnion;
+    await updateDoc(gameRef, {
+      likes: arrayBehavior(userId),
+    });
     return { ok: true };
   } catch (error) {
     console.error(error);
@@ -90,12 +84,11 @@ export const createOrModifyGameRanking = async (
   record: number,
   recordToRender: string
 ) => {
-  // let result: "update" | "noupdate" = "update"; default는 가장 빈번할 것으로 예상되는 noupdate
   const response: {
-    status: "new" | "update" | "noupdate";
+    status: "new" | "update" | "noupdate"; // 처음기록, 기록갱신, 기록갱신X
     ranking: IRanking | null;
   } = {
-    status: "noupdate",
+    status: "noupdate", // default는 발생빈도가 가장 높은 noupdate.
     ranking: null,
   };
   try {

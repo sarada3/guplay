@@ -1,44 +1,14 @@
-import styled, { keyframes, css } from "styled-components";
-import React from "react";
+import styled, { css } from "styled-components";
 
-import { FlexCenter } from "../../../../../component-reuse/StyledComponent";
-import { Card } from "../index";
+import { FlexCenter } from "../../../../component-reuse/StyledComponent";
+import { Card } from "./flipcardTypes";
 
-const k_sliding = (xDiff: number, yDiff: number) => keyframes`
-  0% {
-    transform: translateX(0px) translateY(0px);
-  }
-  100% {
-    transform: translateX(${xDiff}px) translateY(${yDiff}px);
-  }
-`;
-const k_rotateY = (start: string, end: string) => keyframes`
-  0% {
-    transform: rotateY(${start});
-  }
-  100% {
-    transform: rotateY(${end});
-  }
-`;
-const k_rotateY_360 = () => keyframes`
-  0% {
-    transform: rotateY(0deg);
-  }
-  50% {
-    transform: rotateY(180deg);
-  }
-  100% {
-    transform: rotateY(0deg);
-  }
-`;
-const k_rotateY_360_re = () => keyframes`
-  0% {
-    transform: rotateY(0deg);
-  }
-  100% {
-    transform: rotateY(360deg);
-  }
-`;
+import {
+  k_rotateY,
+  k_rotateY_360,
+  k_sliding,
+  k_rotateY_360_re,
+} from "./animations/keyframes";
 
 interface CardItemProps {
   index: number;
@@ -89,8 +59,6 @@ const Container = styled.div<{
   `};
 `;
 
-// re: 다른 keyframe을 전달해야 애니메이션을 발동시킴.
-
 // 180deg: 열린상태, 0deg: 뒤쪽
 const InnerContainer = styled.div<{ state: string }>`
   position: relative;
@@ -139,7 +107,6 @@ const Back = styled(InnerItem)`
 `;
 
 const Front = styled(InnerItem)`
-  /* background: red; */
   transform: rotateY(180deg);
 `;
 
@@ -148,13 +115,5 @@ const FrontImg = styled.img`
   width: 60%;
   height: 60%;
 `;
-
-// export default React.memo(CardItem, (prevProps, nextProps) => {
-//   if (prevProps.card.state === nextProps.card.state) {
-//     return true;
-//   } else {
-//     return false;
-//   }
-// });
 
 export default CardItem;

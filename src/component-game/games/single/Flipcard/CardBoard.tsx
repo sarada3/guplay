@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-import { Card } from "../index";
+import { Card } from "./flipcardTypes";
 
 import CardItem from "./CardItem";
 

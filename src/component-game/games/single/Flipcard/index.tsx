@@ -1,35 +1,34 @@
 import styled, { useTheme } from "styled-components";
 import { useState, useEffect, useRef } from "react";
 
-import useLoadingAndError from "../../../../../utils/hooks/useLoadingAndError";
-import { shuffleAndAddTranslateProps } from "../../../../../utils";
-import { getUrl } from "../../../../../utils/storage";
+import { getUrl } from "../../../../utils/storage";
+import { shuffleAndAddTranslateProps } from "./utils";
 
 import CardBoard from "./CardBoard";
-import Timer from "../../../../Timer";
-import { FlexCenter } from "../../../../../component-reuse/StyledComponent";
+import Timer from "../../../Timer";
+import { FlexCenter } from "../../../../component-reuse/StyledComponent";
 
-import { Card } from "../index";
+import { Card } from "./flipcardTypes";
 
-interface PlayingProps {
-  saveStarttime: () => void;
+interface FlipcardProps {
   boardWidth: number;
-  numOfCardPerLine: number;
+  saveStarttime: () => void;
   handleGameEnd: () => void;
   startLoading: () => void;
   endLoading: () => void;
   invokeError: () => void;
+  numOfCardPerLine: number;
 }
 
-function FlipcardPlaying(props: PlayingProps) {
+function Flipcard(props: FlipcardProps) {
   const {
-    numOfCardPerLine,
     boardWidth,
     saveStarttime,
     handleGameEnd,
     startLoading,
     endLoading,
     invokeError,
+    numOfCardPerLine,
   } = props;
   const [cardList, setCardList] = useState<Array<Card>>([]);
   const [countdown, setCountdown] = useState(7);
@@ -241,4 +240,4 @@ const Container = styled(FlexCenter)`
   flex-direction: column;
 `;
 
-export default FlipcardPlaying;
+export default Flipcard;

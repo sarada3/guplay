@@ -14,13 +14,9 @@ import GameIntro from "./gamestate/GameIntro";
 import GameResult from "./gamestate/GameResult";
 
 import { GameStateType, IGame, IRanking, IUser } from "../../types";
+import Onetofifty from "../games/single/Onetofifty";
 
-const FlipcardSetting = lazy(
-  () => import("../games/single/Flipcard/FlipcardSetting")
-);
-const FlipcardPlaying = lazy(
-  () => import("../games/single/Flipcard/FlipcardPlaying")
-);
+const Flipcard = lazy(() => import("../games/single/Flipcard"));
 
 interface GameLayoutGameProps {
   user: IUser | null;
@@ -43,12 +39,14 @@ function GameLayoutGame(props: GameLayoutGameProps) {
   const [gameState, setGameState] = useState<GameStateType>("intro");
   const [boardWidth, setBoardWidth] = useState(0);
   const [startTime, setStartTime] = useState(-1);
-  const [difficulty, setDifficulty] = useState(game.difficulties[0]);
+  const [selectedDifficulty, setSelectedDifficulty] = useState(
+    game.difficulties[0]
+  );
   const [result, setResult] = useState({ record: -1, recordToRender: "" });
   const gameContainerRef = useRef<HTMLDivElement>(null);
 
   const onChangeDifficulty = (difficultyValue: string) => {
-    setDifficulty(difficultyValue);
+    setSelectedDifficulty(difficultyValue);
   };
   const saveStarttime = useCallback(() => {
     const now = Date.now();
@@ -73,7 +71,7 @@ function GameLayoutGame(props: GameLayoutGameProps) {
       const response = await createOrModifyGameRanking(
         user,
         game.id,
-        difficulty,
+        selectedDifficulty,
         result.record,
         result.recordToRender
       );
@@ -96,7 +94,7 @@ function GameLayoutGame(props: GameLayoutGameProps) {
   }, [
     user,
     game.id,
-    difficulty,
+    selectedDifficulty,
     result,
     dispatchGameRanking,
     startLoading,
@@ -131,30 +129,36 @@ function GameLayoutGame(props: GameLayoutGameProps) {
       <Suspense>
         {gameState === "intro" ? (
           <GameIntro
+            selectedDifficulty={selectedDifficulty}
+            difficulties={game.difficulties}
             title={game.title}
             creator={game.creator}
             enterToPlaying={enterToPlaying}
-          >
-            {game.code === "flipcard" && (
-              <FlipcardSetting
-                difficulty={difficulty}
-                onChangeDifficulty={onChangeDifficulty}
-              />
-            )}
-          </GameIntro>
+            onChangeDifficulty={onChangeDifficulty}
+          />
         ) : gameState === "playing" ? (
           <>
-            {game.code === "flipcard" && (
-              <FlipcardPlaying
+            {game.code === "flipcard" ? (
+              <Flipcard
                 boardWidth={boardWidth}
-                numOfCardPerLine={Number(difficulty.charAt(0))}
                 saveStarttime={saveStarttime}
                 handleGameEnd={handleGameEnd}
                 startLoading={startLoading}
                 endLoading={endLoading}
                 invokeError={invokeError}
+                numOfCardPerLine={Number(selectedDifficulty.charAt(0))}
               />
-            )}
+            ) : game.code === "onetofifty" ? (
+              <Onetofifty
+                boardWidth={boardWidth}
+                saveStarttime={saveStarttime}
+                handleGameEnd={handleGameEnd}
+                startLoading={startLoading}
+                endLoading={endLoading}
+                invokeError={invokeError}
+                lastNum={Number(selectedDifficulty)}
+              />
+            ) : null}
           </>
         ) : gameState === "result" ? (
           <GameResult
