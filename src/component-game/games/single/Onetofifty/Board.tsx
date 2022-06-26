@@ -6,13 +6,13 @@ import { Block } from ".";
 
 interface BoardProps {
   boardWidth: number;
+  numOfBlockPerLine: number;
   blockArr: Array<Block>;
   onClickBlock: (num: number) => void;
 }
 
 function Board(props: BoardProps) {
-  const { boardWidth, blockArr, onClickBlock } = props;
-  const numOfBlockPerLine = Math.sqrt(blockArr.length);
+  const { boardWidth, numOfBlockPerLine, blockArr, onClickBlock } = props;
   return (
     <Container boardWidth={boardWidth} numOfBlockPerLine={numOfBlockPerLine}>
       {blockArr.map((block, index) => (

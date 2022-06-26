@@ -1,4 +1,5 @@
 import styled, { css } from "styled-components";
+import { memo } from "react";
 
 import { FlexCenter } from "../../../../component-reuse/StyledComponent";
 import { Card } from "./flipcardTypes";
@@ -19,6 +20,7 @@ interface CardItemProps {
 
 function CardItem(props: CardItemProps) {
   const { index, card, cardWidth, onClickCard } = props;
+  console.log(index, card.state);
 
   return (
     <Container
@@ -116,4 +118,7 @@ const FrontImg = styled.img`
   height: 60%;
 `;
 
-export default CardItem;
+export default memo(
+  CardItem,
+  (prev, next) => prev.card.state === next.card.state
+);

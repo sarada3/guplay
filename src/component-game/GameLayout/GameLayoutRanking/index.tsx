@@ -100,8 +100,9 @@ const TabItem = styled.div<{ isActive: boolean }>`
   flex: 1;
   text-align: center;
   color: ${(props) => (props.isActive ? "black" : "gray")};
-  &:first-child {
-    border-right: 2px solid white;
+  border-right: 2px solid white;
+  &:last-child {
+    border-right: none;
   }
 `;
 

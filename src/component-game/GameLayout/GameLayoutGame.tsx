@@ -155,9 +155,9 @@ function GameLayoutGame(props: GameLayoutGameProps) {
             ) : game.code === "onetofifty" ? (
               <Onetofifty
                 boardWidth={boardWidth}
+                numOfBlockPerLine={Number(selectedDifficulty.charAt(0))}
                 saveStarttime={saveStarttime}
                 handleGameEnd={handleGameEnd}
-                lastNum={Number(selectedDifficulty)}
               />
             ) : null}
           </>

@@ -34,6 +34,7 @@ function BlockItem(props: BlockItemProps) {
 const Container = styled(FlexCenter)<{ effect: BlockEffect }>`
   transform: ${(props) => (props.effect === "in" ? "scale(0)" : "scale(1)")};
   animation: ${(props) => getKeyframe(props.effect)} 0.2s forwards;
+  cursor: pointer;
 `;
 
 const InnerContainer = styled(FlexCenter)`

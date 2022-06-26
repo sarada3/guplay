@@ -11,7 +11,7 @@ import {
 import useCountdown from "../../../utils/hooks/useCountdown";
 import { shuffleArr } from "./utils";
 
-let canClick = true;
+let canClick = false;
 
 export type BlockEffect = "none" | "in" | "out";
 
@@ -22,13 +22,14 @@ export type Block = {
 
 interface OnetofiftyProps {
   boardWidth: number;
+  numOfBlockPerLine: number;
   saveStarttime: () => void;
   handleGameEnd: () => void;
-  lastNum: number;
 }
 
 function Onetofifty(props: OnetofiftyProps) {
-  const { boardWidth, saveStarttime, handleGameEnd, lastNum } = props;
+  const { boardWidth, saveStarttime, handleGameEnd, numOfBlockPerLine } = props;
+  const lastNum = numOfBlockPerLine * numOfBlockPerLine * 2;
   const [blockArr, setBlockArr] = useState<Array<Block>>(
     shuffleArr(
       new Array(lastNum / 2)
@@ -38,7 +39,7 @@ function Onetofifty(props: OnetofiftyProps) {
   );
   const [clicked, setClicked] = useState(-1);
   const [correct, setCorrect] = useState(1);
-  const { countdown } = useCountdown(1);
+  const { countdown } = useCountdown(3, 0);
 
   const onClickBlock = useCallback((numClicked: number) => {
     if (canClick) {
@@ -107,6 +108,7 @@ function Onetofifty(props: OnetofiftyProps) {
       <Timer isActive={countdown < 1} />
       <Board
         boardWidth={boardWidth}
+        numOfBlockPerLine={numOfBlockPerLine}
         blockArr={blockArr}
         onClickBlock={onClickBlock}
       />

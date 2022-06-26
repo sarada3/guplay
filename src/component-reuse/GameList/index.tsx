@@ -40,7 +40,7 @@ function GameList(props: GameListProps) {
 const OuterLi = styled.li`
   width: 400px;
   height: 340px;
-  padding: 10px;
+  padding: 20px;
   cursor: pointer;
   &:hover {
     background-color: #eee;

@@ -1,14 +1,17 @@
 import styled, { useTheme } from "styled-components";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 import { getUrl } from "../../../../utils/storage";
 import { shuffleAndAddTranslateProps } from "./utils";
+import useCountdown from "../../../utils/hooks/useCountdown";
 
 import CardBoard from "./CardBoard";
 import Timer from "../../../Timer";
 import { FlexCenter } from "../../../../component-reuse/StyledComponent";
 
 import { Card } from "./flipcardTypes";
+
+let canClick = false;
 
 interface FlipcardProps {
   boardWidth: number;
@@ -21,6 +24,7 @@ interface FlipcardProps {
 }
 
 function Flipcard(props: FlipcardProps) {
+  console.log("canClick", canClick);
   const {
     boardWidth,
     saveStarttime,
@@ -31,13 +35,13 @@ function Flipcard(props: FlipcardProps) {
     numOfCardPerLine,
   } = props;
   const [cardList, setCardList] = useState<Array<Card>>([]);
-  const [countdown, setCountdown] = useState(7);
   const [numOfMatch, setNumOfMatch] = useState(0);
   const [tempIndex, setTempIndex] = useState(-1);
+  const [clickedIndex, setClickedIndex] = useState(-1);
+  const slidingTotalDuration = (cardList.length - 1) / 20 + 0.1;
+  const { countdown } = useCountdown(7, slidingTotalDuration);
   const theme = useTheme();
   const isUnderMobileWidth = window.innerWidth <= theme.deviceSizes.mobile;
-
-  const countdownTimer = useRef<ReturnType<typeof setInterval>>();
 
   // 카드 한개 길이:
   // mobile 이하- 보드길이 / 한줄당 카드수 => 화면이 작아서 게임하기 불편하므로 꽉채움
@@ -47,89 +51,104 @@ function Flipcard(props: FlipcardProps) {
     : boardWidth / (numOfCardPerLine + 1);
   const numOfCardTotal = (numOfCardPerLine * numOfCardPerLine - 1) / 2;
 
-  /**
-   * cardList state의 변경 연산이 과하므로
-   * setCardList([prev => {...}]) 식으로 하지 않고
-   * newCardList를 먼저 연산한 후 setState을 날려준다.
-   */
-  const onClickCard = (targetIndex: number) => {
-    if (countdown > 0) {
-      return;
-    }
-    let selector = "";
-    // already opened. Do nothing.
-    if (cardList[targetIndex].state === "open") selector = "already_opened";
-    // first card opened.
-    else if (tempIndex === -1) {
-      selector = "first";
-    }
-    // second card opened. Match
-    else if (cardList[targetIndex].no === cardList[tempIndex].no)
-      selector = "match";
-    // second card opened. no Match
-    else if (cardList[targetIndex].no !== cardList[tempIndex].no)
-      selector = "unmatch";
+  const onClickCard2 = useCallback(
+    (indexValue: number) => {
+      if (countdown < 1) {
+        setClickedIndex(indexValue);
+      }
+    },
+    [countdown]
+  );
 
-    switch (selector) {
-      case "first":
-        console.log("first");
-        const newCardList: Array<Card> = [
-          ...cardList.slice(0, targetIndex),
-          {
-            ...cardList[targetIndex],
-            state: "open",
-          },
-          ...cardList.slice(targetIndex + 1),
-        ];
-        setCardList(newCardList);
-        setTempIndex(targetIndex);
-        break;
-      case "match":
-        console.log("match");
-        // game complete
-        if (numOfMatch === numOfCardTotal - 1) {
-          handleGameEnd();
-        } else {
-          const newCardList2: Array<Card> = [
-            ...cardList.slice(0, targetIndex),
+  useEffect(() => {
+    if (cardList.length > 0 && clickedIndex > -1) {
+      canClick = false;
+      let selector = "";
+      // already opened. Do nothing.
+      if (cardList[clickedIndex].state === "open") selector = "already_opened";
+      // first card opened.
+      else if (tempIndex === -1) {
+        selector = "first";
+      }
+      // second card opened. Match
+      else if (cardList[clickedIndex].no === cardList[tempIndex].no)
+        selector = "match";
+      // second card opened. no Match
+      else if (cardList[clickedIndex].no !== cardList[tempIndex].no)
+        selector = "unmatch";
+
+      switch (selector) {
+        case "first":
+          console.log("first");
+          const newCardList: Array<Card> = [
+            ...cardList.slice(0, clickedIndex),
             {
-              ...cardList[targetIndex],
+              ...cardList[clickedIndex],
               state: "open",
             },
-            ...cardList.slice(targetIndex + 1),
+            ...cardList.slice(clickedIndex + 1),
           ];
-          setCardList(newCardList2);
-          setNumOfMatch((prev) => prev + 1);
-          setTempIndex(-1);
-        }
-        break;
-      case "unmatch":
-        console.log("unmatch", tempIndex);
-        const newCardList3 = cardList.map((card, index): Card => {
-          if (index === targetIndex) {
-            return {
-              ...card,
-              state:
-                card.state === "unmatch_target_close"
-                  ? "re_unmatch_target_close"
-                  : "unmatch_target_close",
-            };
-          } else if (index === tempIndex) {
-            return {
-              ...card,
-              state: "unmatch_temp_close",
-            };
+          setCardList(newCardList);
+          setTempIndex(clickedIndex);
+          setClickedIndex(-1);
+          break;
+        case "match":
+          console.log("match");
+          // game complete
+          if (numOfMatch === numOfCardTotal - 1) {
+            handleGameEnd();
           } else {
-            return card;
+            const newCardList2: Array<Card> = [
+              ...cardList.slice(0, clickedIndex),
+              {
+                ...cardList[clickedIndex],
+                state: "open",
+              },
+              ...cardList.slice(clickedIndex + 1),
+            ];
+            setCardList(newCardList2);
+            setNumOfMatch((prev) => prev + 1);
+            setTempIndex(-1);
+            setClickedIndex(-1);
           }
-        });
-        setCardList(newCardList3);
-        setTempIndex(-1);
-        break;
-      default:
-        break;
+          break;
+        case "unmatch":
+          console.log("unmatch", tempIndex);
+          const newCardList3 = cardList.map((card, index): Card => {
+            if (index === clickedIndex) {
+              return {
+                ...card,
+                state:
+                  card.state === "unmatch_target_close"
+                    ? "re_unmatch_target_close"
+                    : "unmatch_target_close",
+              };
+            } else if (index === tempIndex) {
+              return {
+                ...card,
+                state: "unmatch_temp_close",
+              };
+            } else {
+              return card;
+            }
+          });
+          setCardList(newCardList3);
+          setTempIndex(-1);
+          setClickedIndex(-1);
+          break;
+        default:
+          break;
+      }
+      canClick = true;
     }
-  };
+  }, [
+    cardList,
+    handleGameEnd,
+    numOfCardTotal,
+    numOfMatch,
+    clickedIndex,
+    tempIndex,
+  ]);
 
   // card image url download [todo] firebase v9 storage getBlob 알아보기
   useEffect(() => {
@@ -170,12 +189,6 @@ function Flipcard(props: FlipcardProps) {
       }
     };
     initCardList();
-    return () => {
-      // 게임 도중 dependencies에 의해 발생할일이 없음. 따라서 여기서 clearInterval
-      if (countdownTimer.current) {
-        clearInterval(countdownTimer.current);
-      }
-    };
   }, [
     numOfCardPerLine,
     numOfCardTotal,
@@ -185,12 +198,7 @@ function Flipcard(props: FlipcardProps) {
     invokeError,
   ]);
   useEffect(() => {
-    if (countdown < 0) {
-      // clear countdownTimer
-      if (countdownTimer.current) {
-        clearInterval(countdownTimer.current);
-      }
-    } else if (countdown === 0) {
+    if (countdown === 0) {
       // game start.
       setCardList((prev) =>
         prev.map((card) => ({
@@ -206,20 +214,12 @@ function Flipcard(props: FlipcardProps) {
           state: "open",
         }))
       );
-    } else if (countdown === 7) {
-      if (cardList.length !== 0) {
-        const Sec_slidingTotalDuration = (cardList.length - 1) / 20 + 0.1;
-        setTimeout(() => {
-          countdownTimer.current = setInterval(() => {
-            if (countdown > 0) {
-              setCountdown((prev) => prev - 1);
-            }
-          }, 1000);
-        }, Sec_slidingTotalDuration * 1000);
-      }
     }
   }, [countdown, cardList.length, saveStarttime]);
-
+  if (cardList.length === 0) {
+    console.log("a");
+    return null;
+  }
   return (
     <Container>
       <Timer isActive={countdown < 1} />
@@ -228,7 +228,7 @@ function Flipcard(props: FlipcardProps) {
         boardWidth={boardWidth}
         cardWidth={cardWidth}
         countdown={countdown}
-        onClickCard={onClickCard}
+        onClickCard={onClickCard2}
       />
     </Container>
   );
