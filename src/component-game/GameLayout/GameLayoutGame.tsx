@@ -27,6 +27,10 @@ interface GameLayoutGameProps {
   invokeError: () => void;
 }
 
+/**
+ * game context에 있는 game.code에 따라
+ * 해당 게임의 코드를 lazy loading한다.
+ */
 function GameLayoutGame(props: GameLayoutGameProps) {
   const {
     user,
