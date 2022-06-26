@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 
 import Board from "./Board";
 import Timer from "../../../Timer";
@@ -11,7 +11,7 @@ import {
 import useCountdown from "../../../utils/hooks/useCountdown";
 import { shuffleArr } from "./utils";
 
-let canClick = false;
+// let canClick = false;
 
 export type BlockEffect = "none" | "in" | "out";
 
@@ -40,9 +40,11 @@ function Onetofifty(props: OnetofiftyProps) {
   const [clicked, setClicked] = useState(-1);
   const [correct, setCorrect] = useState(1);
   const { countdown } = useCountdown(3, 0);
+  const canClick = useRef(false);
 
   const onClickBlock = useCallback((numClicked: number) => {
-    if (canClick) {
+    console.log("canClick.current", canClick.current);
+    if (canClick.current) {
       setClicked(numClicked);
     }
   }, []);
@@ -55,8 +57,8 @@ function Onetofifty(props: OnetofiftyProps) {
    * 4) clicked === correct가 false이기 때문에 if문 실행되지 않음
    */
   useEffect(() => {
-    canClick = false;
     if (clicked === correct) {
+      canClick.current = false;
       let selector = "";
       if (clicked <= lastNum / 2) selector = "change block";
       else if (clicked !== lastNum) selector = "disappear block";
@@ -94,13 +96,14 @@ function Onetofifty(props: OnetofiftyProps) {
           break;
       }
       setCorrect((prev) => prev + 1);
+      canClick.current = true;
     }
-    canClick = true;
   }, [clicked, correct, lastNum, blockArr, handleGameEnd]);
 
   useEffect(() => {
-    if (countdown === 0) {
+    if (countdown < 1) {
       saveStarttime();
+      canClick.current = true;
     }
   }, [countdown, saveStarttime]);
   return (
