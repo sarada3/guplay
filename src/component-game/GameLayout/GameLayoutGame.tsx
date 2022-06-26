@@ -157,9 +157,6 @@ function GameLayoutGame(props: GameLayoutGameProps) {
                 boardWidth={boardWidth}
                 saveStarttime={saveStarttime}
                 handleGameEnd={handleGameEnd}
-                startLoading={startLoading}
-                endLoading={endLoading}
-                invokeError={invokeError}
                 lastNum={Number(selectedDifficulty)}
               />
             ) : null}

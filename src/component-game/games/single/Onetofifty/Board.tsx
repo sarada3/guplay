@@ -13,21 +13,10 @@ interface BoardProps {
 function Board(props: BoardProps) {
   const { boardWidth, blockArr, onClickBlock } = props;
   const numOfBlockPerLine = Math.sqrt(blockArr.length);
-  const blockWidthPercentage = 100 / numOfBlockPerLine;
-  const boardPaddingPercentage = blockWidthPercentage / 2;
   return (
-    <Container
-      boardWidth={boardWidth}
-      blockWidthPercentage={blockWidthPercentage}
-      boardPaddingPercentage={boardPaddingPercentage}
-    >
+    <Container boardWidth={boardWidth} numOfBlockPerLine={numOfBlockPerLine}>
       {blockArr.map((block, index) => (
-        <BlockItem
-          key={index}
-          block={block}
-          blockWidthPercentage={blockWidthPercentage}
-          onClickBlock={onClickBlock}
-        />
+        <BlockItem key={index} block={block} onClickBlock={onClickBlock} />
       ))}
     </Container>
   );
@@ -35,15 +24,18 @@ function Board(props: BoardProps) {
 
 const Container = styled.div<{
   boardWidth: number;
-  blockWidthPercentage: number;
-  boardPaddingPercentage: number;
+  numOfBlockPerLine: number;
 }>`
-  padding: ${(props) => props.boardPaddingPercentage}%;
+  padding: ${(props) => 50 / props.numOfBlockPerLine}%;
   position: relative;
   width: ${(props) => props.boardWidth}px;
   height: ${(props) => props.boardWidth}px;
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-rows: ${(props) => `repeat(${props.numOfBlockPerLine}, 1fr)`};
+  grid-template-columns: ${(props) =>
+    `repeat(${props.numOfBlockPerLine}, 1fr)`};
+  grid-gap: 4px;
+  font-size: ${(props) => 100 / props.numOfBlockPerLine}px;
 `;
 
 export default Board;
