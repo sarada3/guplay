@@ -52,6 +52,11 @@ function GameLayoutGame(props: GameLayoutGameProps) {
   const onChangeDifficulty = (difficultyValue: string) => {
     setSelectedDifficulty(difficultyValue);
   };
+  /**
+   * countdown이 끝나고 게임이 시작함과 동시에
+   * 현재시간을 startTime state에 저장.
+   * 게임이 끝났을때 시간을 startTime과 비교하여 소요시간을 얻는다.
+   */
   const saveStarttime = useCallback(() => {
     const now = Date.now();
     setStartTime(now);

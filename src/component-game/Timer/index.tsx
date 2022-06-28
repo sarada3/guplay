@@ -6,10 +6,18 @@ import TimerSeconds from "./TimerSeconds";
 
 interface TimerProps {
   isActive: boolean;
+  /**
+   * viewport height
+   */
+  size: number;
 }
 
+/**
+ * setInterval으로 인해서 실제로 흐르는 시간을 랜더링하지 않고(CPU낭비)
+ * animation을 활용해 숫자 string을 빠르게 이동시켜 실제 시간이 흐르는 듯한 화면을 출력한다.(GPU사용)
+ */
 function Timer(props: TimerProps) {
-  const { isActive } = props;
+  const { isActive, size } = props;
   const [timerEnd, setTimerEnd] = useState(false);
 
   const handleTimeEnd = useCallback(() => {
@@ -17,32 +25,28 @@ function Timer(props: TimerProps) {
   }, []);
 
   return (
-    <Container>
-      <Counter>
-        {isActive ? (
-          <>
-            <TimerMinutes handleTimeEnd={handleTimeEnd} />
-            <span>:</span>
-            <TimerSeconds timerEnd={timerEnd} />
-          </>
-        ) : (
-          "00:00:00"
-        )}
-      </Counter>
+    <Container size={size}>
+      {isActive ? (
+        <>
+          <TimerMinutes handleTimeEnd={handleTimeEnd} />
+          <span>:</span>
+          <TimerSeconds timerEnd={timerEnd} />
+        </>
+      ) : (
+        "00:00:00"
+      )}
     </Container>
   );
 }
 
-const Container = styled.div`
-  height: 40px;
-  overflow: hidden;
-`;
-
-const Counter = styled.div`
-  height: 100%;
+const Container = styled.div<{ size: number }>`
+  height: ${(props) => props.size}vh;
+  overflow-y: hidden;
   display: flex;
+  justify-content: center;
+  align-items: center;
   font: system-ui;
-  overflow: hidden;
+  font-size: ${(props) => props.size}vh;
 `;
 
 export default Timer;

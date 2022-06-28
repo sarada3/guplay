@@ -43,7 +43,6 @@ function Onetofifty(props: OnetofiftyProps) {
   const canClick = useRef(false);
 
   const onClickBlock = useCallback((numClicked: number) => {
-    console.log("canClick.current", canClick.current);
     if (canClick.current) {
       setClicked(numClicked);
     }
@@ -108,7 +107,7 @@ function Onetofifty(props: OnetofiftyProps) {
   }, [countdown, saveStarttime]);
   return (
     <Container>
-      <Timer isActive={countdown < 1} />
+      <Timer isActive={countdown < 1} size={4} />
       <Board
         boardWidth={boardWidth}
         numOfBlockPerLine={numOfBlockPerLine}

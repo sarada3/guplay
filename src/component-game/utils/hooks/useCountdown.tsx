@@ -9,11 +9,13 @@ function useCountdown(initNum: number, delay: number) {
   const [countdown, setCountdown] = useState(initNum);
   const countdownTimer = useRef<ReturnType<typeof setInterval>>();
   useEffect(() => {
-    setTimeout(() => {
-      countdownTimer.current = setInterval(() => {
-        setCountdown((prev) => prev - 1);
-      }, 1000);
-    }, delay);
+    if (delay > -1) {
+      setTimeout(() => {
+        countdownTimer.current = setInterval(() => {
+          setCountdown((prev) => prev - 1);
+        }, 1000);
+      }, delay * 1000);
+    }
     return () => {
       // clear countdown interval
       if (countdownTimer.current) {

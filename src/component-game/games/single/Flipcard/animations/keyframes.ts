@@ -31,8 +31,9 @@ export const k_rotateY_360 = () => keyframes`
 `;
 
 /**
- * [todo] 같은 동작을 하는 keyframe을 작동시킬 때
- * 다른 keyframes 객체를 전달해야 trigger 되는 듯함. 더 알아볼 것
+ * [issue todo] 같은 동작을 하는 keyframe을 작동시킬 때
+ * 다른 keyframes 객체를 전달해야 trigger 되는 듯함.
+ * 임시로 _re를 붙여서 하나 더 만들어서 해결. 더 알아볼 것.
  */
 export const k_rotateY_360_re = () => keyframes`
   0% {

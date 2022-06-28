@@ -11,8 +11,6 @@ import { FlexCenter } from "../../../../component-reuse/StyledComponent";
 
 import { Card } from "./flipcardTypes";
 
-// let canClick = false;
-
 interface FlipcardProps {
   boardWidth: number;
   saveStarttime: () => void;
@@ -34,32 +32,40 @@ function Flipcard(props: FlipcardProps) {
     numOfCardPerLine,
   } = props;
   const [cardList, setCardList] = useState<Array<Card>>([]);
+  // 정답 맞춘 카드 수
   const [numOfMatch, setNumOfMatch] = useState(0);
+  // 두번째 뒤집은 카드가 첫번째 뒤집은 카드와 같은지 비교하기 위해 첫번째카드를 temp에 저장
   const [tempIndex, setTempIndex] = useState(-1);
+  // 현재 클릭한 카드
   const [clickedIndex, setClickedIndex] = useState(-1);
-  const slidingTotalDuration = (cardList.length - 1) / 20 + 0.1;
-  const { countdown } = useCountdown(7, slidingTotalDuration);
+  const totalSlidingDuration = (cardList.length - 1) * 0.1;
+  const { countdown } = useCountdown(7, totalSlidingDuration);
+  /**
+   * 세마포(semaphore)
+   */
   const canClick = useRef(false);
   const theme = useTheme();
   const isUnderMobileWidth = window.innerWidth <= theme.deviceSizes.mobile;
 
-  // 카드 한개 길이:
-  // mobile 이하- 보드길이 / 한줄당 카드수 => 화면이 작아서 게임하기 불편하므로 꽉채움
-  // mobile 위 - 보드길이 / (한줄당 카드수 + 1) => 양쪽 합해서 카드 한개만큼의 패딩
+  /**
+   * 카드 한개 길이
+   */
   const cardWidth = isUnderMobileWidth
     ? boardWidth / numOfCardPerLine
     : boardWidth / (numOfCardPerLine + 1);
+  /**
+   * The number of card 종류
+   */
   const numOfCardTotal = (numOfCardPerLine * numOfCardPerLine - 1) / 2;
 
-  const onClickCard2 = useCallback((indexValue: number) => {
-    console.log("aa", canClick.current);
+  const onClickCard = useCallback((indexValue: number) => {
     if (canClick.current) {
       setClickedIndex(indexValue);
     }
   }, []);
 
   // card image url download
-  // [todo] firebase v9 storage getBlob 알아보기
+  // [todo] firebase v9 storage getBlob 활용하여 더 간단하게 만들어보기
   useEffect(() => {
     const initCardList = async () => {
       startLoading();
@@ -120,6 +126,7 @@ function Flipcard(props: FlipcardProps) {
       saveStarttime();
       canClick.current = true;
     } else if (countdown === 6) {
+      // 게임 시작 전 6초동안 카드를 보여주기 위함
       setCardList((prev) =>
         prev.map((card) => ({
           ...card,
@@ -134,22 +141,24 @@ function Flipcard(props: FlipcardProps) {
     if (cardList.length > 0 && clickedIndex > -1) {
       canClick.current = false;
       let selector = "";
-      // already opened. Do nothing.
-      if (cardList[clickedIndex].state === "open") selector = "already_opened";
-      // first card opened.
-      else if (tempIndex === -1) {
+      if (cardList[clickedIndex].state === "open") {
+        // already opened. Do nothing.
+        selector = "already_opened";
+      } else if (tempIndex === -1) {
+        // first card opened.
         selector = "first";
-      }
-      // second card opened. Match
-      else if (cardList[clickedIndex].no === cardList[tempIndex].no)
+      } else if (cardList[clickedIndex].no === cardList[tempIndex].no) {
+        // second card opened. Match
         selector = "match";
-      // second card opened. no Match
-      else if (cardList[clickedIndex].no !== cardList[tempIndex].no)
+      } else if (cardList[clickedIndex].no !== cardList[tempIndex].no) {
+        // second card opened. no Match
         selector = "unmatch";
+      }
 
+      let newCardList: Array<Card>;
       switch (selector) {
         case "first":
-          const newCardList: Array<Card> = [
+          newCardList = [
             ...cardList.slice(0, clickedIndex),
             {
               ...cardList[clickedIndex],
@@ -162,11 +171,11 @@ function Flipcard(props: FlipcardProps) {
           setClickedIndex(-1);
           break;
         case "match":
-          // game complete
           if (numOfMatch === numOfCardTotal - 1) {
+            // game complete
             handleGameEnd();
           } else {
-            const newCardList2: Array<Card> = [
+            newCardList = [
               ...cardList.slice(0, clickedIndex),
               {
                 ...cardList[clickedIndex],
@@ -174,14 +183,14 @@ function Flipcard(props: FlipcardProps) {
               },
               ...cardList.slice(clickedIndex + 1),
             ];
-            setCardList(newCardList2);
+            setCardList(newCardList);
             setNumOfMatch((prev) => prev + 1);
             setTempIndex(-1);
             setClickedIndex(-1);
           }
           break;
         case "unmatch":
-          const newCardList3 = cardList.map((card, index): Card => {
+          newCardList = cardList.map((card, index): Card => {
             if (index === clickedIndex) {
               return {
                 ...card,
@@ -199,7 +208,7 @@ function Flipcard(props: FlipcardProps) {
               return card;
             }
           });
-          setCardList(newCardList3);
+          setCardList(newCardList);
           setTempIndex(-1);
           setClickedIndex(-1);
           break;
@@ -221,13 +230,13 @@ function Flipcard(props: FlipcardProps) {
   }
   return (
     <Container>
-      <Timer isActive={countdown < 1} />
+      <Timer isActive={countdown < 1} size={4} />
       <CardBoard
         cardList={cardList}
         boardWidth={boardWidth}
         cardWidth={cardWidth}
         countdown={countdown}
-        onClickCard={onClickCard2}
+        onClickCard={onClickCard}
       />
     </Container>
   );
