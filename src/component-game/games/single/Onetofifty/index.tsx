@@ -107,7 +107,7 @@ function Onetofifty(props: OnetofiftyProps) {
   }, [countdown, saveStarttime]);
   return (
     <Container>
-      <Timer isActive={countdown < 1} size={4} />
+      <Timer isActive={countdown < 1} size={5} />
       <Board
         boardWidth={boardWidth}
         numOfBlockPerLine={numOfBlockPerLine}
