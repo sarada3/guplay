@@ -1,7 +1,12 @@
 import { FieldValue } from "firebase/firestore";
 
 export type GameCategoryType = "single" | "multi";
-export type PageRouteType = "web" | "mobile" | "mypage";
+export type PageRouteType =
+  | "web"
+  | "mobile"
+  | "mypage"
+  | "xbox"
+  | "playstation";
 export type LoginRouteType = "signup" | "signin" | "forgotpassword";
 export type GamecodeType = "flipcard" | "onetofifty" | "fortress" | string;
 export type GameStateType = "intro" | "playing" | "result";

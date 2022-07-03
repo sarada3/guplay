@@ -1,13 +1,13 @@
-import styled from "styled-components";
-import React, { useState } from "react";
-
 import RankingItem from "./RankingItem";
-import { TextSmall } from "../../../component-reuse/StyledComponent";
 import {
   LobbyContainer,
   LobbyInnerContainer,
   LobbyMobileCloseButton,
 } from "../GameLayoutLobby";
+import { TextSmall } from "../../../component-reuse/StyledComponent";
+
+import styled from "styled-components";
+import React, { useState } from "react";
 
 import { IRanking } from "../../../types";
 
@@ -81,7 +81,7 @@ const InnerContainer = styled(LobbyInnerContainer)`
 
 const MobileCloseButton = styled(LobbyMobileCloseButton)`
   @media ${(props) => props.theme.device.UPTO_TABLET} {
-    left: -20px;
+    left: -10px;
   }
 `;
 
@@ -110,7 +110,7 @@ const RankItemContainer = styled.ul`
   padding: 10px;
   width: 100%;
   min-width: 200px;
-  overflow-x: auto;
+  /* overflow-x: auto; */
 `;
 
 export default React.memo(GameLayoutRanking);

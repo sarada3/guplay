@@ -1,30 +1,23 @@
-import styled from "styled-components";
-import { useState, useEffect, useCallback, useRef } from "react";
-
 import Board from "./Board";
-import Timer from "../../../Timer";
+import Timer from "../../../../packages/Timer";
 import {
   FlexCenter,
   TextTitle,
 } from "../../../../component-reuse/StyledComponent";
 
+import styled from "styled-components";
+import { useState, useEffect, useCallback, useRef } from "react";
+
 import useCountdown from "../../../utils/hooks/useCountdown";
 import { shuffleArr } from "./utils";
 
-// let canClick = false;
-
-export type BlockEffect = "none" | "in" | "out";
-
-export type Block = {
-  num: number;
-  effect: BlockEffect;
-};
+import { Block } from "./types";
 
 interface OnetofiftyProps {
   boardWidth: number;
-  numOfBlockPerLine: number;
   saveStarttime: () => void;
   handleGameEnd: () => void;
+  numOfBlockPerLine: number;
 }
 
 function Onetofifty(props: OnetofiftyProps) {

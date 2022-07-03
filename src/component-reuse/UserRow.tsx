@@ -1,6 +1,7 @@
+import UserThumbnail from "./UserThumbnail";
+
 import styled from "styled-components";
 
-import UserThumbnail from "./UserThumbnail";
 import { IUser } from "../types";
 
 interface UserRowProps {

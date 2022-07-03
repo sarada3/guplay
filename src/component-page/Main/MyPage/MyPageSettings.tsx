@@ -1,14 +1,14 @@
+import UserThumbnail from "../../../component-reuse/UserThumbnail";
+import {
+  TextSmall,
+  HoverEffect,
+} from "../../../component-reuse/StyledComponent";
+
 import styled from "styled-components";
 import { useState } from "react";
 
 import { validateName } from "../../../utils";
 import { updateUser } from "../../../utils/db";
-
-import UserThumbnail from "../../../component-reuse/UserThumbnail";
-import {
-  HoverButton,
-  TextSmall,
-} from "../../../component-reuse/StyledComponent";
 
 import { IUser } from "../../../types";
 
@@ -65,15 +65,17 @@ function MyPageSetting(props: MyPageSettingProp) {
             {inputEnabled ? (
               <div style={{ display: "flex" }}>
                 <ModifyButton marginRight={5} onClick={updateName}>
-                  OK
+                  <HoverEffect padding="10px 15px 10px 15px">OK</HoverEffect>
                 </ModifyButton>
                 <ModifyButton marginRight={0} onClick={onClickCancle}>
-                  Cancel
+                  <HoverEffect padding="10px 15px 10px 15px">
+                    Cancel
+                  </HoverEffect>
                 </ModifyButton>
               </div>
             ) : (
               <ModifyButton marginRight={0} onClick={enableInput}>
-                modify
+                <HoverEffect padding="10px 15px 10px 15px">modify</HoverEffect>
               </ModifyButton>
             )}
           </InfoName>
@@ -136,11 +138,12 @@ const InfoNameInput = styled.input`
   }
 `;
 
-const ModifyButton = styled(HoverButton)<{ marginRight: number }>`
+const ModifyButton = styled.button<{ marginRight: number }>`
   margin-right: ${(props) => props.marginRight}px;
-  padding: 5px 10px 5px 10px;
+  padding: 0;
   border: 1px solid lightgray;
-  border-radius: 10px;
+  border-radius: 100px;
+  overflow: hidden;
   @media ${(props) => props.theme.device.UPTO_MOBILE} {
     margin-right: 0px;
   }

@@ -1,6 +1,6 @@
-import styled from "styled-components";
+import { TextTitle } from "../../../../component-reuse/StyledComponent";
 
-import { TextTitle } from "../../../component-reuse/StyledComponent";
+import styled from "styled-components";
 
 interface GameIntroProps {
   selectedDifficulty: string;

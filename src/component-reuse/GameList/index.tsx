@@ -1,9 +1,9 @@
+import GameListItem from "./GameListItem";
+
 import styled from "styled-components";
 
-import { useGameContext } from "../../utils/hooks/useContextCustom";
 import { readRankings } from "../../utils/db";
-
-import GameListItem from "./GameListItem";
+import { useGameContext } from "../../utils/hooks/useContextCustom";
 
 import { IGame } from "../../types";
 
@@ -28,24 +28,16 @@ function GameList(props: GameListProps) {
       <SubTitle>{titleText.sub}</SubTitle>
       <ListContainer>
         {gameList.map((game) => (
-          <OuterLi key={game.code} onClick={() => onClickGameThumbnail(game)}>
-            <GameListItem game={game} />
-          </OuterLi>
+          <GameListItem
+            key={game.code}
+            game={game}
+            onClickGameThumbnail={onClickGameThumbnail}
+          />
         ))}
       </ListContainer>
     </section>
   );
 }
-
-const OuterLi = styled.li`
-  width: 400px;
-  height: 340px;
-  padding: 20px;
-  cursor: pointer;
-  &:hover {
-    background-color: #eee;
-  }
-`;
 
 const MainTitle = styled.h1`
   font-size: 24px;

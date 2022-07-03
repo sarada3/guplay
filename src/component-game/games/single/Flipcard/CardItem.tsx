@@ -1,8 +1,4 @@
-import styled, { css } from "styled-components";
-import { memo } from "react";
-
 import { FlexCenter } from "../../../../component-reuse/StyledComponent";
-import { Card } from "./flipcardTypes";
 
 import {
   k_rotateY,
@@ -10,6 +6,11 @@ import {
   k_sliding,
   k_rotateY_360_re,
 } from "./animations/keyframes";
+
+import styled, { css } from "styled-components";
+import { memo } from "react";
+
+import { Card } from "./types";
 
 interface CardItemProps {
   index: number;

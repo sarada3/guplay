@@ -1,4 +1,4 @@
-import { Card } from "./flipcardTypes";
+import { Card } from "./types";
 
 /**
  * sliding 애니메이션 구현을 위해

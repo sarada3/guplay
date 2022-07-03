@@ -1,7 +1,7 @@
-import styled from "styled-components";
-
 import { TextSmall, TextBlue } from "../StyledComponent";
 import { loaderAnimated } from "../../assets/icons";
+
+import styled from "styled-components";
 
 import { LoginRouteType } from "../../types";
 

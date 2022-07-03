@@ -1,11 +1,11 @@
-import styled from "styled-components";
-import { memo } from "react";
+import { FlexCenter } from "../../../../component-reuse/StyledComponent";
 
 import { k_scale_in, k_scale_out } from "./animations/keyframes";
 
-import { FlexCenter } from "../../../../component-reuse/StyledComponent";
+import styled from "styled-components";
+import { memo } from "react";
 
-import { Block, BlockEffect } from ".";
+import { Block, BlockEffect } from "./types";
 
 const getKeyframe = (effect: BlockEffect) => {
   if (effect === "none") {

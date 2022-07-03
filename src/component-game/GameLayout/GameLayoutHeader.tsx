@@ -1,13 +1,13 @@
+import LoginModal from "../../component-reuse/LoginModal";
+import { TextSmall } from "../../component-reuse/StyledComponent";
+import { heart, xmark } from "../../assets/icons";
+
 import styled from "styled-components";
 import React from "react";
 
 import { updateGameLike } from "../../utils/db";
 import { useUserContext } from "../../utils/hooks/useContextCustom";
 import useLoginModalOpen from "../../utils/hooks/useLoginModalOpen";
-
-import LoginModal from "../../component-reuse/LoginModal";
-import { TextSmall } from "../../component-reuse/StyledComponent";
-import { heart, xmark } from "../../assets/icons";
 
 import { IGame } from "../../types";
 
@@ -78,7 +78,7 @@ function GameLayoutHeader(props: GameLayoutHeaderProps) {
           <CloseButton onClick={closeGameWindow}>{xmark}</CloseButton>
         </Contents>
         <MobileRouter>
-          {game.category === "multi" && (
+          {game.category === "single" && (
             <button
               style={{ left: 0 }}
               onClick={() => onClickRouterLink("lobby")}

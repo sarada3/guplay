@@ -1,7 +1,7 @@
-import styled from "styled-components";
-
 import { TitleContainer, Input, Actions, LoginButton } from "./SignIn";
 import { TextSmall, TextBlue } from "../StyledComponent";
+
+import styled from "styled-components";
 
 import { LoginRouteType } from "../../types";
 

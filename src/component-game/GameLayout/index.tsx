@@ -1,11 +1,11 @@
-import styled from "styled-components";
-import { useState, useCallback } from "react";
-import { createPortal } from "react-dom";
-
 import GameLayoutHeader from "./GameLayoutHeader";
 import GameLayoutLobby from "./GameLayoutLobby";
 import GameLayoutGame from "./GameLayoutGame";
 import GameLayoutRanking from "./GameLayoutRanking";
+
+import styled from "styled-components";
+import { useState, useCallback } from "react";
+import { createPortal } from "react-dom";
 
 import { IGame, IRanking, IUser } from "../../types";
 
@@ -97,6 +97,7 @@ function GameLayout(props: GameLayoutProps) {
 }
 
 const Container = styled.div`
+  z-index: ${(props) => props.theme.zIndex.POSITION_FIXED.GAME};
   position: fixed;
   inset: 0;
   width: 100vw;

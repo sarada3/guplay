@@ -1,7 +1,7 @@
-import styled from "styled-components";
 import OverlayScreenCenterBox from "./OverlayCenterBox";
-
 import { loaderAnimated } from "../assets/icons";
+
+import styled from "styled-components";
 
 interface LoadingProps {
   translucent: boolean;

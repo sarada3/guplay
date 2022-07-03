@@ -1,15 +1,15 @@
+import CardBoard from "./CardBoard";
+import Timer from "../../../../packages/Timer";
+import { FlexCenter } from "../../../../component-reuse/StyledComponent";
+
 import styled, { useTheme } from "styled-components";
 import { useState, useEffect, useCallback, useRef } from "react";
 
 import { getUrl } from "../../../../utils/storage";
-import { shuffleAndAddTranslateProps } from "./utils";
 import useCountdown from "../../../utils/hooks/useCountdown";
+import { shuffleAndAddTranslateProps } from "./utils";
 
-import CardBoard from "./CardBoard";
-import Timer from "../../../Timer";
-import { FlexCenter } from "../../../../component-reuse/StyledComponent";
-
-import { Card } from "./flipcardTypes";
+import { Card } from "./types";
 
 interface FlipcardProps {
   boardWidth: number;

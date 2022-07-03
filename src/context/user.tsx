@@ -20,6 +20,9 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const dispatchUser = useCallback((user: IUser) => {
     setUser({ ...user });
   }, []);
+  /**
+   * logout시 state청소
+   */
   const resetUser = useCallback(() => {
     setUser(null);
   }, []);

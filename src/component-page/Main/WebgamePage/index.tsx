@@ -1,10 +1,10 @@
+import CategoryRouter from "./CategoryRouter";
+import GameList from "../../../component-reuse/GameList";
+
 import styled from "styled-components";
 import { useState, useCallback } from "react";
 
 import { useGameContext } from "../../../utils/hooks/useContextCustom";
-
-import CategoryRouter from "./CategoryRouter";
-import GameList from "../../../component-reuse/GameList";
 
 import { GameCategoryType } from "../../../types";
 

@@ -1,6 +1,6 @@
-import useStorage from "../utils/hooks/useStorage";
-
 import { loaderAnimated } from "../assets/icons";
+
+import useStorage from "../utils/hooks/useStorage";
 
 import { IUser } from "../types";
 

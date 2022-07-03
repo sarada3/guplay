@@ -1,12 +1,12 @@
+import LoginModal from "../../../../component-reuse/LoginModal";
+import UserRow from "../../../../component-reuse/UserRow";
+import { FlexCenter } from "../../../../component-reuse/StyledComponent";
+
 import styled from "styled-components";
 
-import useLoginModalOpen from "../../../utils/hooks/useLoginModalOpen";
+import useLoginModalOpen from "../../../../utils/hooks/useLoginModalOpen";
 
-import LoginModal from "../../../component-reuse/LoginModal";
-import UserRow from "../../../component-reuse/UserRow";
-import { FlexCenter } from "../../../component-reuse/StyledComponent";
-
-import { IUser } from "../../../types";
+import { IUser } from "../../../../types";
 
 interface GameResultProps {
   user: IUser | null;

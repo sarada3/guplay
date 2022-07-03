@@ -13,6 +13,15 @@ declare module "styled-components" {
       HEIGHT_HEADER: number;
       HEIGHT_HEADER_MOBILE: number;
     };
+    zIndex: {
+      POSITION_FIXED: {
+        GUPLAY: {
+          HEADER: number;
+        };
+        GAME: number;
+        OVERLAY_CENTER_BOX: number;
+      };
+    };
     deviceSizes: {
       mobile: number;
       tablet: number;

@@ -1,9 +1,8 @@
-import styled from "styled-components";
-
 import WebgamePage from "./WebgamePage";
 import MobilegamePage from "./MobilegamePage";
 import MyPage from "./MyPage";
 
+import styled from "styled-components";
 import { PageRouteType } from "../../types";
 
 interface MainProps {
@@ -27,7 +26,6 @@ function Main(props: MainProps) {
 }
 
 const Container = styled.main`
-  margin: auto;
   margin-top: ${(props) => props.theme.length.HEIGHT_HEADER}px;
   padding: 50px 120px 0 120px;
   max-width: 2500px;
@@ -40,6 +38,7 @@ const Container = styled.main`
   }
   @media ${(props) => props.theme.device.UPTO_MOBILE} {
     padding: 10px 10px 0 10px;
+    margin-top: ${(props) => props.theme.length.HEIGHT_HEADER_MOBILE}px;
   }
 `;
 

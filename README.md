@@ -5,9 +5,9 @@ Portfolio for frontend algorithns.
 
 # 변수명
 
-- 프로젝트 내부(state 등): 단수: 단수형, 복수: ~list, ~arr
+- react 내부 - 단수: 단수형 / 복수: ~list(rendering state), ~Arr, ~Map
 
-- DB데이터: 단수: 단수형, 복수: 복수형(ex ~s)
+- 데이터베이스 - 단수: 단수형, 복수: 복수형(ex ~s)
 
 # 용어통일
 
@@ -42,18 +42,22 @@ Portfolio for frontend algorithns.
 
 # import 순서
 
-- styled-components
-- react
-- third party library
-- util, custom hook
 - Components
-- icons
+- assets
+- third party library
+- utils
+- lazy components
 - types
-- assets, lazy components
 
 # 기타 규칙
 
+- HTML, CSS built-in을 최대한 활용할 것 - 불필요한 JS를 최대한 줄이자.
 - toggle function(ex. true or false)은 가급적이면 active, inactive 두개롤 각각 만들자(가독성)
+- styled-component에 전달되는 prop은 react 컴포넌트 내부에서 각각 연산하고, 최종적으로 css property만 전달한다
+  (ex. isActive를 전달해서 ${props => props.isActive? "white" : "black"})으로 하지 말고
+  const color = isActive? "white" : "black" 을 계산한 뒤
+  styled-component에 color 전달, ${props => props.color}로 사용하도록.
+  => 가독성이 좋고 styled-component의 재사용 가능성이 높아짐
 
 # 함수를 prop으로 받는 컴포넌트에서 re-rendering 방지 고려사항
 

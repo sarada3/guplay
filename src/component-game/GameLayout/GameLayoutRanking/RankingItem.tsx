@@ -1,9 +1,9 @@
+import UserRow from "../../../component-reuse/UserRow";
+
 import styled from "styled-components";
 import { useState, useEffect } from "react";
 
 import { readUser } from "../../../utils/db";
-
-import UserRow from "../../../component-reuse/UserRow";
 
 import { IRanking, IUser } from "../../../types";
 

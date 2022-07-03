@@ -11,6 +11,16 @@ const length = {
   HEIGHT_HEADER_MOBILE: 56,
 };
 
+const zIndex = {
+  POSITION_FIXED: {
+    GUPLAY: {
+      HEADER: 100,
+    },
+    GAME: 200,
+    OVERLAY_CENTER_BOX: 300,
+  },
+};
+
 const deviceSizes = {
   mobile: 375, // windows phone
   tablet: 768, // iPad
@@ -28,6 +38,7 @@ const device = {
 const theme: DefaultTheme = {
   color,
   length,
+  zIndex,
   deviceSizes,
   device,
 };

@@ -1,15 +1,7 @@
-import styled, { keyframes } from "styled-components";
-import { signOut } from "firebase/auth";
-
-import { auth } from "../../firebase";
-import { useUserContext } from "../../utils/hooks/useContextCustom";
-
-import {
-  TextSmall,
-  TextBlue,
-  HoverButton,
-} from "../../component-reuse/StyledComponent";
+import { TextSmall, TextBlue } from "../../component-reuse/StyledComponent";
 import { gear, rightBracket } from "../../assets/icons";
+
+import styled, { keyframes } from "styled-components";
 
 import { IUser, PageRouteType } from "../../types";
 
@@ -17,19 +9,16 @@ interface SettingModalProps {
   user: IUser;
   closeSettingModal: () => void;
   replacePageRoute: (routeL: PageRouteType) => void;
+  handleLogout: () => void;
 }
 
 function SettingModal(props: SettingModalProps) {
-  const { user, closeSettingModal, replacePageRoute } = props;
-  const { resetUser } = useUserContext();
+  // console.log("SettingModal");
+  const { user, closeSettingModal, replacePageRoute, handleLogout } = props;
 
   const onClickActionItem = (route: PageRouteType) => {
     closeSettingModal();
     replacePageRoute(route);
-  };
-  const logout = async () => {
-    await signOut(auth);
-    resetUser();
   };
 
   return (
@@ -52,7 +41,7 @@ function SettingModal(props: SettingModalProps) {
           <ActionItem onClick={() => onClickActionItem("mypage")}>
             <ActionItemIcon>{gear}</ActionItemIcon>MY PAGE
           </ActionItem>
-          <ActionItem onClick={logout}>
+          <ActionItem onClick={handleLogout}>
             <ActionItemIcon>{rightBracket}</ActionItemIcon>Logout
           </ActionItem>
         </Actions>
@@ -108,10 +97,12 @@ const Actions = styled.div`
   flex-direction: column;
 `;
 
-const ActionItem = styled(HoverButton)`
+const ActionItem = styled.button`
+  display: flex;
   padding: 15px 10px 15px 10px;
   width: 100%;
   justify-content: flex-start;
+  align-items: center;
   color: #3f3f3f;
   fill: #3f3f3f;
 `;

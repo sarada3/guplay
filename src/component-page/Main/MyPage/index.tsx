@@ -1,12 +1,12 @@
+import MyPageSetting from "./MyPageSettings";
+import GameList from "../../../component-reuse/GameList";
+
 import styled from "styled-components";
 import { useEffect } from "react";
 
 import { auth } from "../../../firebase";
 import { useUserContext } from "../../../utils/hooks/useContextCustom";
 import { useGameContext } from "../../../utils/hooks/useContextCustom";
-
-import MyPageSetting from "./MyPageSettings";
-import GameList from "../../../component-reuse/GameList";
 
 import { PageRouteType } from "../../../types";
 

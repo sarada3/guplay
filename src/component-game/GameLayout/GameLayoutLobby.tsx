@@ -8,6 +8,7 @@ interface GameLayoutLobbyProps {
 
 function GameLayoutLobby(props: GameLayoutLobbyProps) {
   const { mobileOpen, closeMobileRoutes } = props;
+  console.log("Lobby mobileOpen", mobileOpen);
   return (
     <LobbyContainer mobileOpen={mobileOpen}>
       <LobbyInnerContainer>
@@ -22,9 +23,10 @@ function GameLayoutLobby(props: GameLayoutLobbyProps) {
 
 export const LobbyContainer = styled.div<{ mobileOpen: boolean }>`
   grid-area: lobby;
-  z-index: 1;
+  overflow: auto;
   @media ${(props) => props.theme.device.UPTO_TABLET} {
     grid-area: lobby_game_ranking;
+    z-index: 1;
     position: absolute;
     inset: 0;
     display: flex;
@@ -39,11 +41,14 @@ export const LobbyInnerContainer = styled.div`
   position: relative;
   padding-top: 10px;
   width: 100%;
+  min-width: 200px;
+  overflow-x: auto;
   height: 100%;
   text-align: center;
   background-color: pink;
   @media ${(props) => props.theme.device.UPTO_TABLET} {
     width: 80%;
+    overflow-x: visible;
   }
 `;
 

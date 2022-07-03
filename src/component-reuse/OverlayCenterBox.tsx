@@ -1,6 +1,7 @@
+import { FlexCenter } from "./StyledComponent";
+
 import styled from "styled-components";
 import { createPortal } from "react-dom";
-import { FlexCenter } from "./StyledComponent";
 
 interface OverlayScreenCenterBoxProps {
   translucent: boolean;
@@ -25,6 +26,7 @@ function OverlayScreenCenterBox(props: OverlayScreenCenterBoxProps) {
 }
 
 const Container = styled(FlexCenter)<{ translucent: boolean }>`
+  z-index: ${(props) => props.theme.zIndex.POSITION_FIXED.OVERLAY_CENTER_BOX};
   position: fixed;
   inset: 0;
   width: 100vw;

@@ -1,22 +1,22 @@
 import styled from "styled-components";
-import React from "react";
 
 import { PageRouteType } from "../../../types";
 
-interface PageRouterLinkProps {
+interface NavLinkItemProps {
   path: PageRouteType;
   pageRoute: PageRouteType;
   replacePageRoute: (page: PageRouteType) => void;
 }
 
-function PageRouterLink(props: PageRouterLinkProps) {
+function NavLinkItem(props: NavLinkItemProps) {
   const { path, pageRoute, replacePageRoute } = props;
 
   const isActive = path === pageRoute;
+  const linkColor = isActive ? "#01875f" : "inherit";
 
   return (
     <Container>
-      <Link isActive={isActive} onClick={() => replacePageRoute(path)}>
+      <Link linkColor={linkColor} onClick={() => replacePageRoute(path)}>
         {path}
       </Link>
     </Container>
@@ -29,11 +29,12 @@ const Container = styled.div`
 `;
 
 const Link = styled.a<{
-  isActive: boolean;
+  linkColor: string;
 }>`
-  position: relative;
-  height: 100%;
-  color: ${(props) => (props.isActive ? "#01875f" : "inherit")};
+  font-size: 14px;
+  font-weight: 550;
+  text-transform: uppercase;
+  color: ${(props) => props.linkColor};
 `;
 
-export default PageRouterLink;
+export default NavLinkItem;

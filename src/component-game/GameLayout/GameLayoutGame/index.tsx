@@ -1,3 +1,6 @@
+import GameIntro from "./gamestate/GameIntro";
+import GameResult from "./gamestate/GameResult";
+
 import styled from "styled-components";
 import React, {
   useState,
@@ -8,15 +11,12 @@ import React, {
   Suspense,
 } from "react";
 
-import { createOrModifyGameRanking } from "../../utils/db";
+import { createOrModifyGameRanking } from "../../../utils/db";
 
-import GameIntro from "./gamestate/GameIntro";
-import GameResult from "./gamestate/GameResult";
+import { GameStateType, IGame, IRanking, IUser } from "../../../types";
 
-import { GameStateType, IGame, IRanking, IUser } from "../../types";
-import Onetofifty from "../games/single/Onetofifty";
-
-const Flipcard = lazy(() => import("../games/single/Flipcard"));
+const Onetofifty = lazy(() => import("../../games/single/Onetofifty"));
+const Flipcard = lazy(() => import("../../games/single/Flipcard"));
 
 interface GameLayoutGameProps {
   user: IUser | null;
@@ -146,26 +146,24 @@ function GameLayoutGame(props: GameLayoutGameProps) {
             onChangeDifficulty={onChangeDifficulty}
           />
         ) : gameState === "playing" ? (
-          <>
-            {game.code === "flipcard" ? (
-              <Flipcard
-                boardWidth={boardWidth}
-                saveStarttime={saveStarttime}
-                handleGameEnd={handleGameEnd}
-                startLoading={startLoading}
-                endLoading={endLoading}
-                invokeError={invokeError}
-                numOfCardPerLine={Number(selectedDifficulty.charAt(0))}
-              />
-            ) : game.code === "onetofifty" ? (
-              <Onetofifty
-                boardWidth={boardWidth}
-                numOfBlockPerLine={Number(selectedDifficulty.charAt(0))}
-                saveStarttime={saveStarttime}
-                handleGameEnd={handleGameEnd}
-              />
-            ) : null}
-          </>
+          game.code === "flipcard" ? (
+            <Flipcard
+              boardWidth={boardWidth}
+              saveStarttime={saveStarttime}
+              handleGameEnd={handleGameEnd}
+              startLoading={startLoading}
+              endLoading={endLoading}
+              invokeError={invokeError}
+              numOfCardPerLine={Number(selectedDifficulty.charAt(0))}
+            />
+          ) : game.code === "onetofifty" ? (
+            <Onetofifty
+              boardWidth={boardWidth}
+              saveStarttime={saveStarttime}
+              handleGameEnd={handleGameEnd}
+              numOfBlockPerLine={Number(selectedDifficulty.charAt(0))}
+            />
+          ) : null
         ) : gameState === "result" ? (
           <GameResult
             user={user}
@@ -181,7 +179,6 @@ function GameLayoutGame(props: GameLayoutGameProps) {
 
 const Container = styled.div`
   grid-area: game;
-  z-index: 0;
   background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab) 0 0/300%
     300%;
   @media ${(props) => props.theme.device.UPTO_TABLET} {

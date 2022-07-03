@@ -1,56 +1,69 @@
+import { FlexCenter, HoverEffect } from "../StyledComponent";
+import { heart } from "../../assets/icons";
+
 import styled from "styled-components";
+import React from "react";
 
 import useStorage from "../../utils/hooks/useStorage";
-
-import { FlexCenter } from "../StyledComponent";
-import { heart } from "../../assets/icons";
 
 import { IGame } from "../../types";
 
 interface GameListItemProps {
   game: IGame;
+  onClickGameThumbnail: (selectedGame: IGame) => void;
 }
 
 function GameListItem(props: GameListItemProps) {
   const {
+    game,
     game: { title, category, thumbnail, likes, creator },
+    onClickGameThumbnail,
   } = props;
   const gameThumbnailSrc = useStorage(thumbnail);
   const creatorThumbnailSrc = useStorage(creator.thumbnail);
   return (
-    <Container>
-      <Top>
-        {gameThumbnailSrc !== "" && <ThumbnailImg src={gameThumbnailSrc} />}
-      </Top>
-      <Bottom>
-        <Creator>
-          <CreatorThumbnailContainer>
-            {creatorThumbnailSrc !== "" && (
-              <img
-                width="100%"
-                height="100%"
-                src={creatorThumbnailSrc}
-                alt={creator.name}
-              />
-            )}
-          </CreatorThumbnailContainer>
-          <CreatorContents>
-            <Title>{title}</Title>
-            <div>{category}</div>
-          </CreatorContents>
-        </Creator>
-        <FlexCenter>
-          <HeartIcon>{heart}</HeartIcon>
-          <span>{likes.length}</span>
-        </FlexCenter>
-      </Bottom>
+    <Container onClick={() => onClickGameThumbnail(game)}>
+      <HoverEffect padding="20px 20px 20px 20px">
+        <div
+          style={{
+            width: "100%",
+            height: "100%",
+          }}
+        >
+          <Top>
+            {gameThumbnailSrc !== "" && <ThumbnailImg src={gameThumbnailSrc} />}
+          </Top>
+          <Bottom>
+            <Creator>
+              <CreatorThumbnailContainer>
+                {creatorThumbnailSrc !== "" && (
+                  <img
+                    width="100%"
+                    height="100%"
+                    src={creatorThumbnailSrc}
+                    alt={creator.name}
+                  />
+                )}
+              </CreatorThumbnailContainer>
+              <CreatorContents>
+                <Title>{title}</Title>
+                <div>{category}</div>
+              </CreatorContents>
+            </Creator>
+            <FlexCenter>
+              <HeartIcon>{heart}</HeartIcon>
+              <span>{likes.length}</span>
+            </FlexCenter>
+          </Bottom>
+        </div>
+      </HoverEffect>
     </Container>
   );
 }
 
-const Container = styled.div`
-  width: 100%;
-  height: 100%;
+const Container = styled.li`
+  width: 400px;
+  height: 340px;
 `;
 
 const Top = styled(FlexCenter)`
@@ -102,4 +115,7 @@ const HeartIcon = styled.div`
   height: 20px;
 `;
 
-export default GameListItem;
+export default React.memo(
+  GameListItem,
+  (prev, next) => prev.game.likes.length === next.game.likes.length
+);

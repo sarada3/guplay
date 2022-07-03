@@ -1,8 +1,8 @@
-import styled from "styled-components";
-
 import BlockItem from "./BlockItem";
 
-import { Block } from ".";
+import styled from "styled-components";
+
+import { Block } from "./types";
 
 interface BoardProps {
   boardWidth: number;

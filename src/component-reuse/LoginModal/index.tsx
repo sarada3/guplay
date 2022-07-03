@@ -1,3 +1,11 @@
+import OverlayScreenCenterBox from "../OverlayCenterBox";
+import SignIn from "./SignIn";
+import SignUp from "./SignUp";
+import ForgotPassword from "./ForgotPassword";
+import Error from "../Error";
+import { FlexCenter } from "../StyledComponent";
+import { xmark } from "../../assets/icons";
+
 import styled from "styled-components";
 import { useState, useCallback } from "react";
 import {
@@ -6,19 +14,11 @@ import {
   sendPasswordResetEmail,
 } from "firebase/auth";
 
-import useLoadingAndError from "../../utils/hooks/useLoadingAndError";
-import { useUserContext } from "../../utils/hooks/useContextCustom";
 import { auth } from "../../firebase";
 import { validateEmail } from "../../utils";
 import { createUser } from "../../utils/db";
-
-import OverlayScreenCenterBox from "../OverlayCenterBox";
-import SignIn from "./SignIn";
-import SignUp from "./SignUp";
-import ForgotPassword from "./ForgotPassword";
-import Error from "../Error";
-import { FlexCenter } from "../StyledComponent";
-import { xmark } from "../../assets/icons";
+import useLoadingAndError from "../../utils/hooks/useLoadingAndError";
+import { useUserContext } from "../../utils/hooks/useContextCustom";
 
 import { LoginRouteType, IUser } from "../../types";
 
