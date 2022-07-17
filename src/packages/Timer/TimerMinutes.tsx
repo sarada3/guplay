@@ -29,8 +29,7 @@ function TimerMinutes(props: TimerMinutesProps) {
       }
     }
   }, [minute, handleTimeEnd]);
-
-  return <span>{minute < 10 ? `0${minute}` : minute}</span>;
+  return <span>{(minute + "").padStart(2, "0")}</span>;
 }
 
 export default TimerMinutes;

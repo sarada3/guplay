@@ -1,5 +1,5 @@
 import UserThumbnail from "../../component-reuse/UserThumbnail";
-import { HoverEffect, FlexCenter } from "../../component-reuse/StyledComponent";
+import { HoverEffect } from "../../component-reuse/StyledComponent";
 import { search, questionmark, plus } from "../../assets/icons";
 
 import styled from "styled-components";
@@ -13,7 +13,6 @@ interface HeaderActionsProps {
 }
 
 function HeaderActions(props: HeaderActionsProps) {
-  console.log("HeaderActions");
   const { user, onClickThumbnail } = props;
   return (
     <Container>

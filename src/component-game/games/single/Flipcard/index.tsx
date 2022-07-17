@@ -6,7 +6,7 @@ import styled, { useTheme } from "styled-components";
 import { useState, useEffect, useCallback, useRef } from "react";
 
 import { getUrl } from "../../../../utils/storage";
-import useCountdown from "../../../utils/hooks/useCountdown";
+import useCountdown from "../../../../packages/useCountdown";
 import { shuffleAndAddTranslateProps } from "./utils";
 
 import { Card } from "./types";

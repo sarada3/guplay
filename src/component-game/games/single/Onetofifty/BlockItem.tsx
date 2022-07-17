@@ -1,21 +1,11 @@
 import { FlexCenter } from "../../../../component-reuse/StyledComponent";
 
-import { k_scale_in, k_scale_out } from "./animations/keyframes";
-
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { memo } from "react";
 
-import { Block, BlockEffect } from "./types";
+import { k_scale_in, k_scale_out } from "./animations/keyframes";
 
-const getKeyframe = (effect: BlockEffect) => {
-  if (effect === "none") {
-    return;
-  } else if (effect === "in") {
-    return k_scale_in();
-  } else {
-    return k_scale_out();
-  }
-};
+import { Block, BlockEffect } from "./types";
 
 interface BlockItemProps {
   block: Block;
@@ -23,28 +13,42 @@ interface BlockItemProps {
 }
 
 function BlockItem(props: BlockItemProps) {
+  console.log("BlockItem");
   const { block, onClickBlock } = props;
   return (
-    <Container effect={block.effect} onClick={() => onClickBlock(block.num)}>
+    <Container
+      effect={block.effect}
+      num={block.num}
+      onClick={() => onClickBlock(block.num)}
+    >
       <InnerContainer>{block.num !== -1 && block.num}</InnerContainer>
     </Container>
   );
 }
 
-const Container = styled(FlexCenter)<{ effect: BlockEffect }>`
+const Container = styled(FlexCenter)<{ effect: BlockEffect; num: number }>`
   transform: ${(props) => (props.effect === "in" ? "scale(0)" : "scale(1)")};
-  animation: ${(props) => getKeyframe(props.effect)} 0.2s forwards;
+  ${(props) => {
+    if (props.effect === "none") {
+      return null;
+    } else if (props.effect === "in") {
+      return css`
+        animation: ${k_scale_in} 0.2s forwards;
+      `;
+    } else if (props.effect === "out") {
+      return css`
+        animation: ${k_scale_out} 0.2s forwards;
+      `;
+    }
+  }};
   cursor: pointer;
 `;
 
 const InnerContainer = styled(FlexCenter)`
   width: 100%;
   height: 100%;
-  background: yellow;
   border-radius: 3px;
+  background: yellow;
 `;
 
-export default memo(
-  BlockItem,
-  (prev, next) => prev.block.num === next.block.num
-);
+export default memo(BlockItem);

@@ -7,12 +7,13 @@ import { readUser } from "../../../utils/db";
 
 import { IRanking, IUser } from "../../../types";
 
-interface RankingItemprops {
+interface GLRankingItemProps {
   ranking: IRanking;
   index: number;
 }
 
-function RankingItem(props: RankingItemprops) {
+function GLRankingItem(props: GLRankingItemProps) {
+  console.log("GLRankingItem");
   const { ranking, index } = props;
   const [ranker, setRanker] = useState<IUser>();
 
@@ -51,4 +52,4 @@ const Container = styled.div`
   }
 `;
 
-export default RankingItem;
+export default GLRankingItem;

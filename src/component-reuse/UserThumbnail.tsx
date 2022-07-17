@@ -11,9 +11,10 @@ interface UserThumbnailProps {
 function UserThumbnail(props: UserThumbnailProps) {
   const { user } = props;
   const thumbnailSrc = useStorage(user.thumbnail);
-  return thumbnailSrc === "" ? (
-    <span style={{ width: "100%", height: "100%" }}>{loaderAnimated}</span>
-  ) : (
+  if (thumbnailSrc === "") {
+    return null;
+  }
+  return (
     <img
       style={{ borderRadius: "999px" }}
       width="100%"
@@ -23,5 +24,4 @@ function UserThumbnail(props: UserThumbnailProps) {
     />
   );
 }
-
 export default UserThumbnail;

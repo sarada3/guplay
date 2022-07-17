@@ -1,6 +1,6 @@
 import { keyframes } from "styled-components";
 
-export const k_scale_in = () => keyframes`
+export const k_scale_in = keyframes`
   0% {
     transform: scale(0);
   }
@@ -12,7 +12,7 @@ export const k_scale_in = () => keyframes`
   }
 `;
 
-export const k_scale_out = () => keyframes`
+export const k_scale_out = keyframes`
   0% {
     transform: scale(1);
   }

@@ -1,12 +1,12 @@
 import styled from "styled-components";
 import React from "react";
 
-interface GameLayoutLobbyProps {
+interface GLLobbyProps {
   mobileOpen: boolean;
   closeMobileRoutes: () => void;
 }
 
-function GameLayoutLobby(props: GameLayoutLobbyProps) {
+function GLLobby(props: GLLobbyProps) {
   const { mobileOpen, closeMobileRoutes } = props;
   console.log("Lobby mobileOpen", mobileOpen);
   return (
@@ -24,6 +24,7 @@ function GameLayoutLobby(props: GameLayoutLobbyProps) {
 export const LobbyContainer = styled.div<{ mobileOpen: boolean }>`
   grid-area: lobby;
   overflow: auto;
+  z-index: 1;
   @media ${(props) => props.theme.device.UPTO_TABLET} {
     grid-area: lobby_game_ranking;
     z-index: 1;
@@ -65,4 +66,4 @@ export const LobbyMobileCloseButton = styled.button`
   }
 `;
 
-export default React.memo(GameLayoutLobby);
+export default React.memo(GLLobby);

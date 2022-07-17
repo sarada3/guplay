@@ -4,14 +4,14 @@ import styled from "styled-components";
 
 import { Block } from "./types";
 
-interface BoardProps {
+interface BlockBoardProps {
   boardWidth: number;
   numOfBlockPerLine: number;
   blockArr: Array<Block>;
   onClickBlock: (num: number) => void;
 }
 
-function Board(props: BoardProps) {
+function BlockBoard(props: BlockBoardProps) {
   const { boardWidth, numOfBlockPerLine, blockArr, onClickBlock } = props;
   return (
     <Container boardWidth={boardWidth} numOfBlockPerLine={numOfBlockPerLine}>
@@ -22,6 +22,10 @@ function Board(props: BoardProps) {
   );
 }
 
+/**
+ * board만 layer 승격,
+ * BlockItem들을 모두 composition layer로 분리하면 메모리 낭비일듯. block클릭 시 board layer 전체를 repaint한다.
+ */
 const Container = styled.div<{
   boardWidth: number;
   numOfBlockPerLine: number;
@@ -36,6 +40,7 @@ const Container = styled.div<{
     `repeat(${props.numOfBlockPerLine}, 1fr)`};
   grid-gap: 4px;
   font-size: ${(props) => 100 / props.numOfBlockPerLine}px;
+  transform: translateZ(0);
 `;
 
-export default Board;
+export default BlockBoard;

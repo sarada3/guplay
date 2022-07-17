@@ -1,25 +1,23 @@
-import { TextTitle } from "../../../../component-reuse/StyledComponent";
+import {
+  FlexCenter,
+  TextTitle,
+} from "../../../../component-reuse/StyledComponent";
 
 import styled from "styled-components";
 
-interface GameIntroProps {
+import { IGame } from "../../../../types";
+
+interface GLGameSingleIntroProps {
+  game: IGame;
   selectedDifficulty: string;
-  difficulties: Array<string>;
-  title: string;
-  creator: {
-    thumbnail: string;
-    name: string;
-  };
   enterToPlaying: () => void;
   onChangeDifficulty: (difficultyValue: string) => void;
 }
 
-function GameIntro(props: GameIntroProps) {
+function GLGameSingleIntro(props: GLGameSingleIntroProps) {
   const {
+    game: { difficulties, title, creator },
     selectedDifficulty,
-    difficulties,
-    title,
-    creator,
     enterToPlaying,
     onChangeDifficulty,
   } = props;
@@ -50,12 +48,9 @@ function GameIntro(props: GameIntroProps) {
   );
 }
 
-const Container = styled.div`
+const Container = styled(FlexCenter)`
   height: 100%;
-  display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
 `;
 
 const Radio = styled.ul`
@@ -82,4 +77,4 @@ const Creator = styled.div`
   bottom: 10%;
 `;
 
-export default GameIntro;
+export default GLGameSingleIntro;

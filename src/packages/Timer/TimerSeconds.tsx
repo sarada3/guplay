@@ -5,8 +5,7 @@ const numStrsSecond = Array.from(Array(60).keys(), (num) =>
 );
 
 /**
- * 1cs 단위까지는 어차피 눈이 인식 못하므로 3씩 건너뛰는게 나을듯
- * 더 나은건 gif 파일 사용하는것.
+ * 1cs 단위까지는 어차피 눈이 인식 못하므로 3씩 건너뛸 것
  */
 const numStrsCentiSecond: Array<string> = [];
 for (let i = 0; i < 100; i += 3) {

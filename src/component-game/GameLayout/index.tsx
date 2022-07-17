@@ -1,7 +1,7 @@
-import GameLayoutHeader from "./GameLayoutHeader";
-import GameLayoutLobby from "./GameLayoutLobby";
-import GameLayoutGame from "./GameLayoutGame";
-import GameLayoutRanking from "./GameLayoutRanking";
+import GLHeader from "./GLHeader";
+import GLLobby from "./GLLobby";
+import GLGame from "./GLGame";
+import GLRanking from "./GLRanking";
 
 import styled from "styled-components";
 import { useState, useCallback } from "react";
@@ -65,18 +65,18 @@ function GameLayout(props: GameLayoutProps) {
   return createPortal(
     <Container>
       <InnerContainer>
-        <GameLayoutHeader
+        <GLHeader
           game={game}
           dispatchGameLike={dispatchGameLike}
           onClickRouterLink={onClickRouterLink}
           closeGameWindow={closeGameWindow}
           invokeError={invokeError}
         />
-        <GameLayoutLobby
+        <GLLobby
           mobileOpen={mobileRoute.lobby}
           closeMobileRoutes={closeMobileRoutes}
         />
-        <GameLayoutGame
+        <GLGame
           user={user}
           game={game}
           dispatchGameRanking={dispatchGameRanking}
@@ -84,7 +84,7 @@ function GameLayout(props: GameLayoutProps) {
           endLoading={endLoading}
           invokeError={invokeError}
         />
-        <GameLayoutRanking
+        <GLRanking
           mobileOpen={mobileRoute.ranking}
           closeMobileRoutes={closeMobileRoutes}
           rankingList={game.rankings}

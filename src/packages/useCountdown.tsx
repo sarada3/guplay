@@ -2,12 +2,14 @@ import { useState, useRef, useEffect } from "react";
 
 /**
  *
- * @param initNum - countdown 수
+ * @param initNum - countdown second
  * @param delay - countdown 시작 전 딜레이
  */
 function useCountdown(initNum: number, delay: number) {
   const [countdown, setCountdown] = useState(initNum);
   const countdownTimer = useRef<ReturnType<typeof setInterval>>();
+
+  //
   useEffect(() => {
     if (delay > -1) {
       setTimeout(() => {
@@ -17,13 +19,12 @@ function useCountdown(initNum: number, delay: number) {
       }, delay * 1000);
     }
     return () => {
-      // clear countdown interval
       if (countdownTimer.current) {
         clearInterval(countdownTimer.current);
       }
     };
   }, [delay]);
-  // setInterval, clearInterval등은 이 useCountdown을 사용하는 컴포넌트에서는 not concern.
+
   useEffect(() => {
     if (countdown < 1) {
       if (countdownTimer.current) {
@@ -31,6 +32,7 @@ function useCountdown(initNum: number, delay: number) {
       }
     }
   }, [countdown]);
+
   return { countdown };
 }
 

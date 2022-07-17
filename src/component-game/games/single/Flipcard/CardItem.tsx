@@ -55,6 +55,7 @@ const Container = styled.div<{
   height: ${(props) => props.cardWidth}px;
   border-radius: 20px;
   overflow: hidden;
+  cursor: pointer;
   ${(props) => css`
     animation: 0.1s linear ${props.index / 20}s
       ${k_sliding(props.translateX, props.translateY)} forwards;

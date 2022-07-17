@@ -11,7 +11,7 @@ import useLoginModalOpen from "../../utils/hooks/useLoginModalOpen";
 
 import { IGame } from "../../types";
 
-interface GameLayoutHeaderProps {
+interface GLHeaderProps {
   game: IGame;
   dispatchGameLike: (
     currentLike: boolean,
@@ -23,7 +23,8 @@ interface GameLayoutHeaderProps {
   invokeError: () => void;
 }
 
-function GameLayoutHeader(props: GameLayoutHeaderProps) {
+function GLHeader(props: GLHeaderProps) {
+  console.log("GLHeader");
   const {
     game,
     dispatchGameLike,
@@ -100,6 +101,7 @@ function GameLayoutHeader(props: GameLayoutHeaderProps) {
 
 const Container = styled.header`
   grid-area: header;
+  z-index: 2;
   background: #fbf0b3;
 `;
 
@@ -122,6 +124,7 @@ const Title = styled.h1`
 const Like = styled.div`
   display: flex;
   align-items: center;
+  transform: translateZ(0);
 `;
 
 const LikeButton = styled.button<{ isLike: boolean }>`
@@ -148,4 +151,4 @@ const MobileRouter = styled.div`
   }
 `;
 
-export default React.memo(GameLayoutHeader);
+export default React.memo(GLHeader);

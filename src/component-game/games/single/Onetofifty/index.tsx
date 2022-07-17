@@ -1,4 +1,4 @@
-import Board from "./Board";
+import BlockBoard from "./BlockBoard";
 import Timer from "../../../../packages/Timer";
 import {
   FlexCenter,
@@ -8,8 +8,8 @@ import {
 import styled from "styled-components";
 import { useState, useEffect, useCallback, useRef } from "react";
 
-import useCountdown from "../../../utils/hooks/useCountdown";
-import { shuffleArr } from "./utils";
+import useCountdown from "../../../../packages/useCountdown";
+import { shuffleArr } from "../../../utils";
 
 import { Block } from "./types";
 
@@ -101,7 +101,7 @@ function Onetofifty(props: OnetofiftyProps) {
   return (
     <Container>
       <Timer isActive={countdown < 1} size={5} />
-      <Board
+      <BlockBoard
         boardWidth={boardWidth}
         numOfBlockPerLine={numOfBlockPerLine}
         blockArr={blockArr}

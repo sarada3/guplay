@@ -1,54 +1,42 @@
-import GameIntro from "./gamestate/GameIntro";
-import GameResult from "./gamestate/GameResult";
+import GLGameSingleIntro from "./GLGameSingleIntro";
+import GLGameSingleResult from "./GLGameSingleResult";
 
 import styled from "styled-components";
-import React, {
-  useState,
-  useEffect,
-  useRef,
-  useCallback,
-  lazy,
-  Suspense,
-} from "react";
+import { useState, useCallback, Suspense, lazy } from "react";
 
-import { createOrModifyGameRanking } from "../../../utils/db";
+import { updateRankingSingle } from "../../../../utils/db";
 
-import { GameStateType, IGame, IRanking, IUser } from "../../../types";
+import { GameStateType, IGame, IUser, IRanking } from "../../../../types";
 
-const Onetofifty = lazy(() => import("../../games/single/Onetofifty"));
-const Flipcard = lazy(() => import("../../games/single/Flipcard"));
+const Onetofifty = lazy(() => import("../../../games/single/Onetofifty"));
+const Flipcard = lazy(() => import("../../../games/single/Flipcard"));
 
-interface GameLayoutGameProps {
+interface GLGameSingleProps {
   user: IUser | null;
   game: IGame;
+  boardWidth: number;
   dispatchGameRanking: (newRanking: IRanking) => void;
   startLoading: () => void;
   endLoading: () => void;
   invokeError: () => void;
 }
 
-/**
- * game context에 있는 game.code에 따라
- * 해당 게임의 코드를 lazy loading한다.
- */
-function GameLayoutGame(props: GameLayoutGameProps) {
+function GLGameSingle(props: GLGameSingleProps) {
   const {
     user,
     game,
+    boardWidth,
     dispatchGameRanking,
     startLoading,
     endLoading,
     invokeError,
   } = props;
   const [gameState, setGameState] = useState<GameStateType>("intro");
-  const [boardWidth, setBoardWidth] = useState(0);
   const [startTime, setStartTime] = useState(-1);
+  const [result, setResult] = useState({ record: -1, recordToRender: "" });
   const [selectedDifficulty, setSelectedDifficulty] = useState(
     game.difficulties[0]
   );
-  const [result, setResult] = useState({ record: -1, recordToRender: "" });
-  const gameContainerRef = useRef<HTMLDivElement>(null);
-
   const onChangeDifficulty = (difficultyValue: string) => {
     setSelectedDifficulty(difficultyValue);
   };
@@ -72,12 +60,13 @@ function GameLayoutGame(props: GameLayoutGameProps) {
       setGameState("result");
     } else {
       console.error("startTime is -1. Something goes wrong");
+      invokeError();
     }
-  }, [startTime]);
+  }, [startTime, invokeError]);
   const registerRanking = useCallback(async () => {
     if (user) {
       startLoading();
-      const response = await createOrModifyGameRanking(
+      const response = await updateRankingSingle(
         user,
         game.id,
         selectedDifficulty,
@@ -118,31 +107,14 @@ function GameLayoutGame(props: GameLayoutGameProps) {
       setGameState("playing");
     }
   };
-  useEffect(() => {
-    // 뷰포트 크기에 맞는 게임보드 사이즈(정사각) 결정
-    const decideBoardWidth = async () => {
-      if (gameContainerRef.current) {
-        const gameContainerWidth = gameContainerRef.current.clientWidth;
-        const gameContainerHeight = gameContainerRef.current.clientHeight;
-        const currentBoardLength = Math.min(
-          gameContainerWidth,
-          gameContainerHeight * 0.9
-        );
-        setBoardWidth(currentBoardLength);
-      }
-    };
-    decideBoardWidth();
-  }, []);
   return (
-    <Container ref={gameContainerRef}>
+    <Container>
       <Suspense>
         {gameState === "intro" ? (
-          <GameIntro
-            selectedDifficulty={selectedDifficulty}
-            difficulties={game.difficulties}
-            title={game.title}
-            creator={game.creator}
+          <GLGameSingleIntro
+            game={game}
             enterToPlaying={enterToPlaying}
+            selectedDifficulty={selectedDifficulty}
             onChangeDifficulty={onChangeDifficulty}
           />
         ) : gameState === "playing" ? (
@@ -165,7 +137,7 @@ function GameLayoutGame(props: GameLayoutGameProps) {
             />
           ) : null
         ) : gameState === "result" ? (
-          <GameResult
+          <GLGameSingleResult
             user={user}
             recordToRender={result.recordToRender}
             onClickRetry={onClickRetry}
@@ -178,17 +150,8 @@ function GameLayoutGame(props: GameLayoutGameProps) {
 }
 
 const Container = styled.div`
-  grid-area: game;
-  background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab) 0 0/300%
-    300%;
-  @media ${(props) => props.theme.device.UPTO_TABLET} {
-    grid-area: lobby_game_ranking;
-    position: absolute;
-    inset: 0;
-  }
+  width: 100%;
+  height: 100%;
 `;
 
-export default React.memo(
-  GameLayoutGame,
-  (prev, next) => prev.game.id === next.game.id && prev.user === next.user
-);
+export default GLGameSingle;

@@ -1,13 +1,13 @@
-import RankingItem from "./RankingItem";
+import RankingItem from "./GLRankingItem";
 import {
   LobbyContainer,
   LobbyInnerContainer,
   LobbyMobileCloseButton,
-} from "../GameLayoutLobby";
+} from "../GLLobby";
 import { TextSmall } from "../../../component-reuse/StyledComponent";
 
 import styled from "styled-components";
-import React, { useState } from "react";
+import { useState, memo } from "react";
 
 import { IRanking } from "../../../types";
 
@@ -19,6 +19,7 @@ interface GameLayoutRankingProps {
 }
 
 function GameLayoutRanking(props: GameLayoutRankingProps) {
+  console.log("GameLayoutRanking");
   const { mobileOpen, closeMobileRoutes, rankingList, difficulties } = props;
   const [tab, setTab] = useState(difficulties[0]);
 
@@ -67,6 +68,8 @@ function GameLayoutRanking(props: GameLayoutRankingProps) {
 
 const Container = styled(LobbyContainer)<{ mobileOpen: boolean }>`
   grid-area: ranking;
+  z-index: 4;
+  transform: translateZ(0);
   @media ${(props) => props.theme.device.UPTO_TABLET} {
     grid-area: lobby_game_ranking;
     justify-content: flex-end;
@@ -113,4 +116,4 @@ const RankItemContainer = styled.ul`
   /* overflow-x: auto; */
 `;
 
-export default React.memo(GameLayoutRanking);
+export default memo(GameLayoutRanking);

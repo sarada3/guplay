@@ -77,7 +77,7 @@ export const updateGameLike = async (
 
 // ===================================  Ranking  ===================================
 
-export const createOrModifyGameRanking = async (
+export const updateRankingSingle = async (
   user: IUser,
   gameId: string,
   difficulty: string,
@@ -128,12 +128,13 @@ export const createOrModifyGameRanking = async (
   }
 };
 
-export const readRankings = async (gameId: string) => {
+export const readRankings = async (game: IGame) => {
   try {
+    const _orderBy = game.category === "single" ? "asc" : "desc";
     const q = query(
       rankingCollection,
-      where("gameId", "==", gameId),
-      orderBy("record", "asc")
+      where("gameId", "==", game.id),
+      orderBy("record", _orderBy)
     );
     const querySnapshot = await getDocs(q);
     const result: Array<IRanking> = [];

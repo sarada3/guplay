@@ -8,14 +8,14 @@ import useLoginModalOpen from "../../../../utils/hooks/useLoginModalOpen";
 
 import { IUser } from "../../../../types";
 
-interface GameResultProps {
+interface GLGameSingleResultProps {
   user: IUser | null;
   recordToRender: string;
   onClickRetry: () => void;
   registerRanking: () => void;
 }
 
-function GameResult(props: GameResultProps) {
+function GLGameSingleResult(props: GLGameSingleResultProps) {
   const { user, recordToRender, onClickRetry, registerRanking } = props;
   const { loginModalOpen, openLoginModal, closeLoginModal } =
     useLoginModalOpen();
@@ -104,4 +104,4 @@ const Action = styled.div`
   text-align: center;
 `;
 
-export default GameResult;
+export default GLGameSingleResult;
